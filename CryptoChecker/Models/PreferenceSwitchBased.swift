@@ -9,7 +9,7 @@ import UIKit
 
 class PreferenceSwitchBased: NSObject {
     let title: String
-    let onStatus: Bool
+    var onStatus: Bool
     
     init(title: String, onStatus: Bool) {
         self.title = title

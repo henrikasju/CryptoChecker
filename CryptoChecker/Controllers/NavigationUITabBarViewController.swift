@@ -26,6 +26,8 @@ class NavigationUITabBarViewController: UITabBarController {
         
         let tabBarList = [ firstViewController, secondViewController, thirdViewController, fourthViewController]
         
+        
+        // TODO: Calculate offset for other devices aswell !
         for controller in tabBarList[1...] {
             controller.tabBarItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: -18, right: 0);
         }
@@ -33,7 +35,7 @@ class NavigationUITabBarViewController: UITabBarController {
         firstViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -14, right: 0);
         
         viewControllers = tabBarList
-        selectedViewController = fourthViewController
+        selectedViewController = secondViewController
     }
     
 

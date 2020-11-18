@@ -22,6 +22,8 @@
 		36A088FD2564920300C8B3CA /* PreferenceTextBased.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088FC2564920300C8B3CA /* PreferenceTextBased.swift */; };
 		36A089002564938200C8B3CA /* PreferenceSwitchBasedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088FF2564938200C8B3CA /* PreferenceSwitchBasedCollectionViewCell.swift */; };
 		36A089032564946000C8B3CA /* PreferenceSwitchBased.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A089022564946000C8B3CA /* PreferenceSwitchBased.swift */; };
+		36A0890725657D3800C8B3CA /* PreferenceSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0890625657D3600C8B3CA /* PreferenceSelectionViewController.swift */; };
+		36A0890A256585EF00C8B3CA /* PreferenceSelectionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A08909256585EF00C8B3CA /* PreferenceSelectionCollectionViewCell.swift */; };
 		36F6258925604F02007EFA32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F6258825604F02007EFA32 /* AppDelegate.swift */; };
 		36F6258B25604F02007EFA32 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F6258A25604F02007EFA32 /* SceneDelegate.swift */; };
 		36F6258D25604F02007EFA32 /* CryptocurrenciesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F6258C25604F02007EFA32 /* CryptocurrenciesViewController.swift */; };
@@ -45,6 +47,8 @@
 		36A088FC2564920300C8B3CA /* PreferenceTextBased.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceTextBased.swift; sourceTree = "<group>"; };
 		36A088FF2564938200C8B3CA /* PreferenceSwitchBasedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceSwitchBasedCollectionViewCell.swift; sourceTree = "<group>"; };
 		36A089022564946000C8B3CA /* PreferenceSwitchBased.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceSwitchBased.swift; sourceTree = "<group>"; };
+		36A0890625657D3600C8B3CA /* PreferenceSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceSelectionViewController.swift; sourceTree = "<group>"; };
+		36A08909256585EF00C8B3CA /* PreferenceSelectionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceSelectionCollectionViewCell.swift; sourceTree = "<group>"; };
 		36F6258525604F02007EFA32 /* CryptoChecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoChecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36F6258825604F02007EFA32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36F6258A25604F02007EFA32 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +97,7 @@
 				36A088DC25633BD600C8B3CA /* WatchlistViewController.swift */,
 				36A088E225643A9C00C8B3CA /* NotificationsViewController.swift */,
 				36A088E525644C6000C8B3CA /* ProfileViewController.swift */,
+				36A0890625657D3600C8B3CA /* PreferenceSelectionViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -103,6 +108,7 @@
 				36A088BF2561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift */,
 				36A088F42564898200C8B3CA /* PreferenceTextBasedCollectionViewCell.swift */,
 				36A088FF2564938200C8B3CA /* PreferenceSwitchBasedCollectionViewCell.swift */,
+				36A08909256585EF00C8B3CA /* PreferenceSelectionCollectionViewCell.swift */,
 			);
 			path = CollectionViewCells;
 			sourceTree = "<group>";
@@ -227,10 +233,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				36A088CC2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift in Sources */,
+				36A0890725657D3800C8B3CA /* PreferenceSelectionViewController.swift in Sources */,
 				36A088E025634B2300C8B3CA /* CustomUITabBarItem.swift in Sources */,
 				36F6258D25604F02007EFA32 /* CryptocurrenciesViewController.swift in Sources */,
 				36A088DA256334DC00C8B3CA /* NavigationUITabBarViewController.swift in Sources */,
 				36A089032564946000C8B3CA /* PreferenceSwitchBased.swift in Sources */,
+				36A0890A256585EF00C8B3CA /* PreferenceSelectionCollectionViewCell.swift in Sources */,
 				36A088ED2564502C00C8B3CA /* DataBaseManager.swift in Sources */,
 				36A088E925644E0700C8B3CA /* Cryptocurrency.swift in Sources */,
 				36F6258925604F02007EFA32 /* AppDelegate.swift in Sources */,

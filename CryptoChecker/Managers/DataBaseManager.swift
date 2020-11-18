@@ -35,14 +35,14 @@ final class DataBaseManager{
     }
     
     public func fetchWatchlistedCryptocurrencies() -> [Cryptocurrency]{
-        var data: [Cryptocurrency] = []
+        var returnData: [Cryptocurrency] = []
         for currency in data {
             if currency.watchlisted {
-                data.append(currency)
+                returnData.append(currency)
             }
         }
         
-        return data
+        return returnData
     }
     
     public func updateData(_ old: Cryptocurrency, to: Cryptocurrency){

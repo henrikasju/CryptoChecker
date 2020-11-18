@@ -15,6 +15,8 @@ class CryptocurrenciesViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .none
+        collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
     
@@ -106,8 +108,6 @@ class CryptocurrenciesViewController: UIViewController {
     }
     
     private func setupCollectionView(){
-        currencyCollectionView.backgroundColor = .none
-        currencyCollectionView.showsVerticalScrollIndicator = false
         
         NSLayoutConstraint.activate([
             currencyCollectionView.topAnchor.constraint(equalTo: fiatButton.bottomAnchor, constant: 16),

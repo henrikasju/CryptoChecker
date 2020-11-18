@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol PreferenceSwitchBasedCollectionViewCellDelegate{
+    func switchToggleChangedState(_ collectionViewCell: UICollectionViewCell, switchToggle: UISwitch)
+}
+
 class PreferenceSwitchBasedCollectionViewCell: UICollectionViewCell {
     
     public static let identifier :String = "PreferenceSwitchBasedCollectionViewCell"
+    
+    var delegate: PreferenceSwitchBasedCollectionViewCellDelegate?
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -62,7 +68,9 @@ class PreferenceSwitchBasedCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func toggleChangedStatus(sender: UISwitch){
-        print("ToggleSwich changed status!")
+        if sender == switchToggle {
+            delegate?.switchToggleChangedState(self, switchToggle: sender)
+        }
     }
     
     required init?(coder: NSCoder) {

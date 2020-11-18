@@ -53,15 +53,21 @@ class ProfileViewController: UIViewController {
                                     ]),
     ]
     
+    var firstViewLoad: Bool = true
+    
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+        super.viewWillAppear(animated) 
         navigationController?.isNavigationBarHidden = true
         
+        if !firstViewLoad {
+            preferencesCollectionView.reloadData()
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        firstViewLoad = false
 
         // Do any additional setup after loading the view.
         view.backgroundColor = Constants.AppColors.appBackground
@@ -83,7 +89,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupPreferencesCollectionView(){
-        preferencesCollectionView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 16).isActive = true
+        preferencesCollectionView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 49).isActive = true
         preferencesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         preferencesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         preferencesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
@@ -102,6 +108,7 @@ class ProfileViewController: UIViewController {
 
 }
 
+//MARK: - CollectionView Section
 extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -112,6 +119,10 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
         return CGSize(width: collectionView.frame.width, height: 50)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var returnCell: UICollectionViewCell? = nil
         
@@ -120,6 +131,10 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
         if indexPath.row < switchBasedPreferences.count{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PreferenceSwitchBasedCollectionViewCell.identifier, for: indexPath) as? PreferenceSwitchBasedCollectionViewCell else{
                 fatalError("[CollectionView] - could't deque cell")
+            }
+            
+            if cell.delegate == nil {
+                cell.delegate = self
             }
             
             // TODO: Needs unwraping and check
@@ -143,6 +158,34 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
 
         
         return returnCell!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Selected Switch Based Cell
+        if indexPath.row >= switchBasedPreferences.count{
+            // Selected Text Based Cell
+            let index: Int = indexPath.row - switchBasedPreferences.count
+            let selection: PreferenceTextBased = textBasedPreferences[index]
+            
+            // TODO: Perhaps add additional check of empty selection object 
+            let vc = PreferenceSelectionViewController()
+            vc.viewData = selection
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+}
+
+extension ProfileViewController: PreferenceSwitchBasedCollectionViewCellDelegate{
+    func switchToggleChangedState(_ collectionViewCell: UICollectionViewCell, switchToggle: UISwitch) {
+        let indexPath: IndexPath = preferencesCollectionView.indexPath(for: collectionViewCell)!
+        if indexPath.row < switchBasedPreferences.count {
+            let index: Int = indexPath.row
+            
+            let selection: PreferenceSwitchBased = switchBasedPreferences[index]
+            selection.onStatus = switchToggle.isOn
+        }
+        
+        preferencesCollectionView.reloadData()
     }
     
     
