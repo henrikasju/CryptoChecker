@@ -64,16 +64,23 @@ class CryptocurrenciesViewController: UIViewController {
     private var representDataToFiat: Bool = true
     private var cryptocurrencies: [Cryptocurrency] = []
     
+    var firstViewLoad: Bool = true
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.isNavigationBarHidden = true
         
         cryptocurrencies = DataBaseManager.shareInstance.fetchCryptocurrencies()
+        if !firstViewLoad{
+            currencyCollectionView.reloadData()
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        firstViewLoad = false
         
         view.backgroundColor = Constants.AppColors.appBackground
         

@@ -64,16 +64,23 @@ class WatchlistViewController: UIViewController {
     private var watchlistedCurrencies: [Cryptocurrency] = []
     private var representDataToFiat: Bool = true
     
+    var firstViewLoad: Bool = true
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.isNavigationBarHidden = true
         
         watchlistedCurrencies = DataBaseManager.shareInstance.fetchWatchlistedCryptocurrencies()
+        if !firstViewLoad {
+            watchlistCollectionView.reloadData()
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        firstViewLoad = false
 
         view.backgroundColor = Constants.AppColors.appBackground
         
@@ -88,7 +95,8 @@ class WatchlistViewController: UIViewController {
         setupButtons()
         setupCollectionView()
         
-        print(watchlistedCurrencies.count)
+        fiatButton.addTarget(self, action: #selector(currencyConversionButtonPressed(sender: )), for: .touchUpInside)
+        bitcoinButton.addTarget(self, action: #selector(currencyConversionButtonPressed(sender: )), for: .touchUpInside)
     }
     
     private func setupTitleLabel(){
@@ -178,8 +186,12 @@ extension WatchlistViewController: CryptocurrencyCollectionViewCellDelegate{
         
         // TODO: Unwrap
         let indexPath: IndexPath = watchlistCollectionView.indexPath(for: collectionViewCell)!
-        let currencySelected: Cryptocurrency = watchlistedCurrencies[indexPath.row]
+        let index: Int = indexPath.row
+        let currencySelected: Cryptocurrency = watchlistedCurrencies[index]
         currencySelected.watchlisted = button.isSelected
+        
+        watchlistedCurrencies.remove(at: index)
+        watchlistCollectionView.reloadData()
 //        DataBaseManager.shareInstance.updateData(, to: <#T##Cryptocurrency#>)
     }
     
