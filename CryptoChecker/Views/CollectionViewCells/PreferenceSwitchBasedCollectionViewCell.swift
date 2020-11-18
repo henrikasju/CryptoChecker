@@ -23,7 +23,8 @@ class PreferenceSwitchBasedCollectionViewCell: UICollectionViewCell {
     let switchToggle: UISwitch = {
         let toggle = UISwitch()
         toggle.translatesAutoresizingMaskIntoConstraints = false
-        
+        toggle.isOn = true
+        toggle.setOn(true, animated: false)
         return toggle;
     }()
     
@@ -35,8 +36,12 @@ class PreferenceSwitchBasedCollectionViewCell: UICollectionViewCell {
         
         addSubview(titleLabel)
         addSubview(switchToggle)
+        
+        bringSubviewToFront(switchToggle)
                 
         setupUIComponents()
+        
+        switchToggle.addTarget(self, action: #selector(toggleChangedStatus(sender:)), for: .valueChanged)
     }
     
     public func updateFieldWithData(preference: PreferenceSwitchBased){
@@ -54,6 +59,10 @@ class PreferenceSwitchBasedCollectionViewCell: UICollectionViewCell {
         switchToggle.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         switchToggle.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
 //        switchToggle.widthAnchor.constraint(equalToConstant: 20).isActive = true
+    }
+    
+    @objc func toggleChangedStatus(sender: UISwitch){
+        print("ToggleSwich changed status!")
     }
     
     required init?(coder: NSCoder) {
