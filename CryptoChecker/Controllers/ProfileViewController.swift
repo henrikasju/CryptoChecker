@@ -34,9 +34,23 @@ class ProfileViewController: UIViewController {
     ]
     
     let textBasedPreferences: [PreferenceTextBased] = [
-        PreferenceTextBased(title: "Data Format", detail: "YYYY-MM-DD"),
-        PreferenceTextBased(title: "Time Format", detail: "24 Hours"),
-        PreferenceTextBased(title: "Fiat Currency", detail: "USD"),
+        PreferenceTextBased(title: "Data Format",
+                            options: [
+                                    PreferenceTextBased.Option(title: "DD-MM-YYYY", selected: false),
+                                PreferenceTextBased.Option(title: "YYYY-MM-DD", selected: true),
+                                    PreferenceTextBased.Option(title: "MM-DD-YY", selected: false),
+                                    ]),
+        PreferenceTextBased(title: "Time Format",
+                            options: [
+                                    PreferenceTextBased.Option(title: "24 Hours", selected: true),
+                                    PreferenceTextBased.Option(title: "12 Hours", selected: false),
+                                    ]),
+        PreferenceTextBased(title: "Fiat Currency",
+                            options: [
+                                    PreferenceTextBased.Option(title: "Yen", selected: false),
+                                    PreferenceTextBased.Option(title: "Euro", selected: false),
+                                    PreferenceTextBased.Option(title: "USD", selected: true),
+                                    ]),
     ]
     
     override func viewWillAppear(_ animated: Bool) {

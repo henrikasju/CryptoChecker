@@ -35,7 +35,7 @@ class PreferenceSwitchBasedCollectionViewCell: UICollectionViewCell {
         
         addSubview(titleLabel)
         addSubview(switchToggle)
-        
+                
         setupUIComponents()
     }
     
