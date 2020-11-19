@@ -38,6 +38,7 @@ class NotificationsViewController: UIViewController {
         
         navigationController?.isNavigationBarHidden = true
         currenciesWithNotifications = DataBaseManager.shareInstance.fetchCryptocurrenciesWithNotifications()
+        currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
     }
     
     override func viewDidLoad() {
@@ -51,6 +52,7 @@ class NotificationsViewController: UIViewController {
         
         notificationTableView.separatorStyle = .none
         notificationTableView.horizontalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -20)
+        notificationTableView.showsVerticalScrollIndicator = false
         
         
         view.addSubview(viewTitle)
@@ -102,6 +104,10 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         return 60
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 45
+    }
+    
 //    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
 //
 //        let mainView = UIView(frame: CGRect(x: 0, y: 0, width: notificationTableView.frame.width, height: 60))
@@ -120,11 +126,19 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
 //    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let returnView = tableView.dequeueReusableHeaderFooterView(withIdentifier: NotificationTableViewHeaderView.identifier) as! NotificationTableViewHeaderView
+        // TODO: OPTIMIZE!!!!!!
         
+//        let returnView = tableView.dequeueReusableHeaderFooterView(withIdentifier: NotificationTableViewHeaderView.identifier) as! NotificationTableViewHeaderView
         
+//        returnView.updateFieldWithData(data: currenciesWithNotifications[section])
         
-        return returnView
+//        let lol = NotificationTableViewHeaderView()
+//        lol.updateFieldWithData(data: currenciesWithNotifications[section])
+        
+        let lol = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 80))
+        lol.backgroundColor = .red
+        
+        return lol
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -136,6 +150,11 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         let notificationIndex: Int = indexPath.row
         let notification = currenciesWithNotifications[currencyIndex].notifications[notificationIndex]
         let lastCell: Bool = ( notificationIndex == (currenciesWithNotifications[currencyIndex].notifications.count - 1) ? true : false)
+        
+        // TODO: Fix needs better solution, has a bug on scroll!
+        if lastCell{
+            cell.dateLabel.textColor = .red
+        }
         
         cell.updateFieldWithData(data: notification, lastCell: lastCell)
         

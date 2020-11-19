@@ -10,6 +10,10 @@ import UIKit
 // TODO: Encapsulation?????
 class Cryptocurrency: NSObject {
     
+    static let valueFloatingPointFiat: String = "%.2f"
+    static let valueFloatingPointBitcoin: String = "%.5f"
+    static let valueChangeFloatingPoint: String = "%.1f"
+    
     class CurrencyNotification: NSObject {
         var setValue: Double
         var aboveValue: Bool
@@ -19,12 +23,17 @@ class Cryptocurrency: NSObject {
         // TODO: Should implement some class, that could do conversions!
         var currencyType: String
         
-        init(setValue: Double, aboveValue: Bool, creationDate: String, currencyType: String) {
+        init(setValue: Double, aboveValue: Bool, creationDate: String, currencyType: String, isOn: Bool = true) {
             self.setValue = setValue
             self.aboveValue = aboveValue
             self.date = creationDate
-            self.isOn = true
+            self.isOn = isOn
             self.currencyType = currencyType
+        }
+        
+        public func getSetValueAsString() -> String{
+            let floatingPoint = ( currencyType == "USD" ? Cryptocurrency.valueFloatingPointFiat : Cryptocurrency.valueChangeFloatingPoint )
+            return String(format: floatingPoint, setValue)
         }
     }
     
@@ -36,10 +45,6 @@ class Cryptocurrency: NSObject {
     var change: Double
     var watchlisted: Bool
     var notifications: [CurrencyNotification]
-    
-    let valueFloatingPointFiat: String = "%.2f"
-    let valueFloatingPointBitcoin: String = "%.5f"
-    let valueChangeFloatingPoint: String = "%.1f"
     
     init(name: String, symbolName: String, image: UIImage, valueFiat: Double, valueBitcoin: Double, valueChange: Double, watchlisted: Bool) {
         self.name = name
@@ -62,14 +67,14 @@ class Cryptocurrency: NSObject {
     }
     
     public func getChangeAsString() -> String{
-        return String(format: valueChangeFloatingPoint, change)
+        return String(format: Cryptocurrency.valueChangeFloatingPoint, change)
     }
     
     public func getFiatValueAsString() -> String{
-        return String(format: valueFloatingPointFiat, valueFiat)
+        return String(format: Cryptocurrency.valueFloatingPointFiat, valueFiat)
     }
     
     public func getBitcoinValueAsString() -> String{
-        return String(format: valueFloatingPointBitcoin, valueBitcoin)
+        return String(format: Cryptocurrency.valueFloatingPointBitcoin, valueBitcoin)
     }
 }

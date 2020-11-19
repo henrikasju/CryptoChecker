@@ -35,7 +35,7 @@ class NotificationTableViewHeaderView: UITableViewHeaderFooterView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(addButtonPressed(sender:)), for: .touchUpInside)
         button.setTitle("Add", for: .normal)
-        button.setTitleColor(Constants.AppColors.Text.green, for: .normal)
+        button.setTitleColor(Constants.NotificationController.Cell.Color.above, for: .normal)
         button.titleLabel?.font = Constants.NotificationController.Cell.Font.addButton
         return button
     }()
@@ -84,8 +84,8 @@ class NotificationTableViewHeaderView: UITableViewHeaderFooterView {
             
             imageAttachment.image = image
             
-            let imageOffsetY: CGFloat = -3
-            imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: 20, height: 20)
+            let imageOffsetY: CGFloat = -5
+            imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: 25, height: 25)
             
             return NSAttributedString(attachment: imageAttachment)
         }()
