@@ -72,6 +72,8 @@ class CryptocurrenciesViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         
         cryptocurrencies = DataBaseManager.shareInstance.fetchCryptocurrencies()
+        cryptocurrencies.append(contentsOf: cryptocurrencies)
+        cryptocurrencies.append(contentsOf: cryptocurrencies)
         if !firstViewLoad{
             currencyCollectionView.reloadData()
         }

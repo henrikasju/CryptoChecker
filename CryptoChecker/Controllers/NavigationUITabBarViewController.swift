@@ -44,7 +44,7 @@ class NavigationUITabBarViewController: UITabBarController {
             meme.topAnchor.constraint(equalTo: view.topAnchor, constant: 0)
         ])
         
-        let tabViewHeight = self.tabBar.frame.height
+//        let tabViewHeight = self.tabBar.frame.height
 //        let imageHeight = firstViewController.tabBarItem.
         
         
@@ -61,7 +61,7 @@ class NavigationUITabBarViewController: UITabBarController {
         firstViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -topOffset+4, right: 0);
         
         viewControllers = tabBarList
-        selectedViewController = thirdViewController
+        selectedViewController = firstViewController
     }
     
 

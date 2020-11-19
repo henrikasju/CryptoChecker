@@ -26,6 +26,12 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    let currencyImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let currencyTextSymbolLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -39,6 +45,14 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+    
+    let currencyValueChangeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "0.00%"
+        label.font = Constants.CurrencyCollection.Cell.Fonts.currencyValueChange
+        return label
     }()
     
     private let currencyValueLabel: UILabel = {
@@ -76,53 +90,35 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
     
     public func updateFieldWithData(data: Cryptocurrency, representAsFiat: Bool)
     {
-        let valueChangedColor: UIColor = (data.change >= 0 ? Constants.CurrencyCollection.Cell.Color.valueChangeAbove : Constants.CurrencyCollection.Cell.Color.valueChangeBelow)
-        let valueChangedImage: UIImage = (data.change >= 0 ? Constants.CurrencyCollection.Cell.Images.valueChangeAbove : Constants.CurrencyCollection.Cell.Images.valueChangeBelow)
+        var valueChangeColor: UIColor
+        var valueChangedImage: UIImage
+        if data.change >= 0 {
+            valueChangeColor = Constants.CurrencyCollection.Cell.Color.valueChangeAbove
+            valueChangedImage = Constants.NotificationController.Cell.Image.above
+        }else{
+            valueChangeColor = Constants.CurrencyCollection.Cell.Color.valueChangeBelow
+            valueChangedImage = Constants.NotificationController.Cell.Image.below
+        }
+
         // Name Label
-        let currencyNameImageAttachmentString: NSAttributedString = {
-            let imageAttachment = NSTextAttachment()
-            let image: UIImage = data.image
-            
-            imageAttachment.image = image
-            
-            let imageOffsetY: CGFloat = -3
-            imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: 20, height: 20)
-            
-            return NSAttributedString(attachment: imageAttachment)
-        }()
-        
-        let currencyNameLabelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: (data.name + " ") )
-        currencyNameLabelAttributedString.append(currencyNameImageAttachmentString)
-        currencyNameLabel.attributedText = currencyNameLabelAttributedString
+        currencyNameLabel.text = data.name
+        currencyImageView.image = data.image
         
         // Symbol name Label
-        let currencySymbolImageAttachmentString: NSAttributedString = {
-            let imageAttachment = NSTextAttachment()
-            var image: UIImage = valueChangedImage
-            image = image.withTintColor( valueChangedColor )
-            
-            imageAttachment.image = image
-            
-            let imageOffsetY: CGFloat = 0
-            imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: 10, height: 10)
-            return NSAttributedString(attachment: imageAttachment)
-        }()
         
-        let currencySymbolValueChangeAttachmentString: NSAttributedString = {
-            let valueAtribute = [NSAttributedString.Key.foregroundColor: valueChangedColor, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10.0), NSAttributedString.Key.baselineOffset : 1] as [NSAttributedString.Key : Any]
-            let attributedString: NSAttributedString = NSAttributedString(string: (" " + data.getChangeAsString() + "%"), attributes: valueAtribute)
-            
-            return attributedString
-        }()
+        // value direction image
+        currencyValueChangeDirectionImageView.image = valueChangedImage
+        currencyValueChangeDirectionImageView.tintColor = valueChangeColor
         
-        let currencySymbolLabelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: (data.symbolName + " ") )
-        currencySymbolLabelAttributedString.append(currencySymbolImageAttachmentString)
-        currencySymbolLabelAttributedString.append(currencySymbolValueChangeAttachmentString)
-        
-        currencyTextSymbolLabel.attributedText = currencySymbolLabelAttributedString
+        currencyValueChangeLabel.textColor = valueChangeColor
+        currencyValueChangeLabel.text = data.getChangeAsString() + "%"
+
+//
+        currencyTextSymbolLabel.text = data.symbolName
         
         // Currency Value
-        currencyValueLabel.text = (representAsFiat ? data.getFiatValueAsString() : data.getBitcoinValueAsString())
+        let symbol: String = (representAsFiat ? "$" : "₿")
+        currencyValueLabel.text = (representAsFiat ? data.getFiatValueAsString() : data.getBitcoinValueAsString()) + symbol
         
         // Watchlist button status
         currencyWatchlistButton.isSelected = data.watchlisted
@@ -141,7 +137,9 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
     
     private func configureContents(){
         addSubview(currencyNameLabel)
+        addSubview(currencyImageView)
         addSubview(currencyTextSymbolLabel)
+        addSubview(currencyValueChangeLabel)
         addSubview(currencyValueChangeDirectionImageView)
         addSubview(currencyValueLabel)
         addSubview(currencyWatchlistButton)
@@ -155,13 +153,18 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
             NSLayoutConstraint(item: currencyNameLabel, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: heightPadding),
             // leading
             NSLayoutConstraint(item: currencyNameLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1, constant: sidePadding),
-            // trailing
-            NSLayoutConstraint(item: currencyNameLabel, attribute: .trailing, relatedBy: .equal, toItem: currencyValueLabel, attribute: .leading, multiplier: 1, constant: 0),
             // bottom
             NSLayoutConstraint(item: currencyNameLabel, attribute: .bottom, relatedBy: .equal, toItem: currencyTextSymbolLabel, attribute: .top, multiplier: 1, constant: 0),
             
             //height
             NSLayoutConstraint(item: currencyNameLabel, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: (contentView.frame.height - (2 * heightPadding)) / 2)
+        ])
+        
+        NSLayoutConstraint.activate([
+            currencyImageView.leadingAnchor.constraint(equalTo: currencyNameLabel.trailingAnchor, constant: 4),
+            currencyImageView.centerYAnchor.constraint(equalTo: currencyNameLabel.centerYAnchor, constant: -1),
+            currencyImageView.heightAnchor.constraint(equalToConstant: 22),
+            currencyImageView.widthAnchor.constraint(equalTo: currencyImageView.heightAnchor, constant: 0),
         ])
         
         // currency symbol constraints
@@ -170,22 +173,24 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
             NSLayoutConstraint(item: currencyTextSymbolLabel, attribute: .top, relatedBy: .equal, toItem: currencyNameLabel, attribute: .bottom, multiplier: 1, constant: 0),
             // leading
             NSLayoutConstraint(item: currencyTextSymbolLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1, constant: sidePadding),
-            // trailing
-            NSLayoutConstraint(item: currencyTextSymbolLabel, attribute: .trailing, relatedBy: .equal, toItem: currencyValueLabel, attribute: .leading, multiplier: 1, constant: 0),
-            // bottom
+
             NSLayoutConstraint(item: currencyTextSymbolLabel, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: -heightPadding),
             
             //height
             NSLayoutConstraint(item: currencyTextSymbolLabel, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: (contentView.frame.height - (2 * heightPadding)) / 2)
             ])
         
-        // currency change direction image
-        
         NSLayoutConstraint.activate([
-            currencyValueChangeDirectionImageView.leadingAnchor.constraint(equalTo: currencyTextSymbolLabel.trailingAnchor, constant: 0),
-            currencyValueChangeDirectionImageView.bottomAnchor.constraint(equalTo: currencyTextSymbolLabel.bottomAnchor, constant: 0),
-            currencyValueChangeDirectionImageView.heightAnchor.constraint(equalToConstant: 10),
+            // currency change direction image
+            
+            currencyValueChangeDirectionImageView.leadingAnchor.constraint(equalTo: currencyTextSymbolLabel.trailingAnchor, constant: 4),
+            currencyValueChangeDirectionImageView.bottomAnchor.constraint(equalTo: currencyTextSymbolLabel.bottomAnchor, constant: -4),
+            currencyValueChangeDirectionImageView.heightAnchor.constraint(equalToConstant: 12),
             currencyValueChangeDirectionImageView.widthAnchor.constraint(equalTo: currencyValueChangeDirectionImageView.heightAnchor, constant: 0),
+            
+            // Value change label
+            currencyValueChangeLabel.centerYAnchor.constraint(equalTo: currencyValueChangeDirectionImageView.centerYAnchor, constant: 0),
+            currencyValueChangeLabel.leadingAnchor.constraint(equalTo: currencyValueChangeDirectionImageView.trailingAnchor, constant: 2)
         ])
         
         // Value constraints
