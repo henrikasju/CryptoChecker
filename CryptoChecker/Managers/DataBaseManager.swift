@@ -22,6 +22,35 @@ final class DataBaseManager{
         Cryptocurrency(name: "Litecoin", symbolName: "LTC", image: #imageLiteral(resourceName: "ltc"), valueFiat: 56.37, valueBitcoin: 0.00023, valueChange: 0.1, watchlisted: false),
     ]
     
+    private init() {
+        print("DataBase created!")
+        
+        // Adding fake notifications!
+        data[1].notifications = [
+            Cryptocurrency.CurrencyNotification(setValue: 304.99, aboveValue: false, creationDate: "2020-09-12", currencyType: "USD"),
+            Cryptocurrency.CurrencyNotification(setValue: 320.00, aboveValue: true, creationDate: "2020-05-27", currencyType: "USD"),
+            Cryptocurrency.CurrencyNotification(setValue: 307.11, aboveValue: true, creationDate: "2020-02-12", currencyType: "USD"),
+            Cryptocurrency.CurrencyNotification(setValue: 299.50, aboveValue: false, creationDate: "2020-01-22", currencyType: "USD"),
+        ]
+        
+        data[2].notifications = [
+            Cryptocurrency.CurrencyNotification(setValue: 1.00, aboveValue: true, creationDate: "2020-07-16", currencyType: "USD"),
+            Cryptocurrency.CurrencyNotification(setValue: 0.98, aboveValue: false, creationDate: "2020-06-10", currencyType: "USD"),
+        ]
+        
+        data[5].notifications = [
+            Cryptocurrency.CurrencyNotification(setValue: 9.50, aboveValue: false, creationDate: "2020-02-12", currencyType: "USD"),
+            Cryptocurrency.CurrencyNotification(setValue: 21.10, aboveValue: true, creationDate: "2020-12-03", currencyType: "USD"),
+        ]
+        
+        data[7].notifications = [
+            Cryptocurrency.CurrencyNotification(setValue: 5.12, aboveValue: true, creationDate: "2019-10-18", currencyType: "USD"),
+            Cryptocurrency.CurrencyNotification(setValue: 4.60, aboveValue: false, creationDate: "2020-08-08", currencyType: "USD"),
+            Cryptocurrency.CurrencyNotification(setValue: 10, aboveValue: true, creationDate: "2019-01-07", currencyType: "USD"),
+            Cryptocurrency.CurrencyNotification(setValue: 3, aboveValue: false, creationDate: "2020-04-04", currencyType: "USD"),
+        ]
+    }
+    
     private var dataWatchlisted: [Cryptocurrency] = []
     
     public static let shareInstance: DataBaseManager = {
@@ -38,6 +67,17 @@ final class DataBaseManager{
         var returnData: [Cryptocurrency] = []
         for currency in data {
             if currency.watchlisted {
+                returnData.append(currency)
+            }
+        }
+        
+        return returnData
+    }
+    
+    public func fetchCryptocurrenciesWithNotifications() -> [Cryptocurrency]{
+        var returnData: [Cryptocurrency] = []
+        for currency in data {
+            if currency.notifications.count > 0 {
                 returnData.append(currency)
             }
         }

@@ -9,6 +9,25 @@ import UIKit
 
 // TODO: Encapsulation?????
 class Cryptocurrency: NSObject {
+    
+    class CurrencyNotification: NSObject {
+        var setValue: Double
+        var aboveValue: Bool
+        // TODO: Should be timestamp!
+        var date: String
+        var isOn: Bool
+        // TODO: Should implement some class, that could do conversions!
+        var currencyType: String
+        
+        init(setValue: Double, aboveValue: Bool, creationDate: String, currencyType: String) {
+            self.setValue = setValue
+            self.aboveValue = aboveValue
+            self.date = creationDate
+            self.isOn = true
+            self.currencyType = currencyType
+        }
+    }
+    
     var name: String
     var symbolName: String
     var image: UIImage
@@ -16,6 +35,7 @@ class Cryptocurrency: NSObject {
     var valueBitcoin: Double
     var change: Double
     var watchlisted: Bool
+    var notifications: [CurrencyNotification]
     
     let valueFloatingPointFiat: String = "%.2f"
     let valueFloatingPointBitcoin: String = "%.5f"
@@ -29,6 +49,7 @@ class Cryptocurrency: NSObject {
         self.valueBitcoin = valueBitcoin
         self.change = valueChange
         self.watchlisted = watchlisted
+        self.notifications = []
     }
     
     public func update(_ currency: Cryptocurrency){

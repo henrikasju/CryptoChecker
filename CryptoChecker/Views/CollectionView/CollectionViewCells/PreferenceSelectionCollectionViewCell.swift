@@ -14,7 +14,7 @@ class PreferenceSelectionCollectionViewCell: UICollectionViewCell {
     // TODO: Do safer unwraping!
     var selectedImageIcon: UIImage? = UIImage(systemName: "checkmark")
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Title"
