@@ -26,11 +26,6 @@ class NotificationsViewController: UIViewController {
         return tableView
     }()
     
-//    let headerHeight: CGFloat = 30
-//    let footerHeight: CGFloat = 30
-//    let sectionEdgeHeight: CGFloat = 30 * 0.9
-//    let sectionCornerRadius: CGFloat = 20
-    
     private var currenciesWithNotifications: [Cryptocurrency] = []
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,6 +33,9 @@ class NotificationsViewController: UIViewController {
         
         navigationController?.isNavigationBarHidden = true
         currenciesWithNotifications = DataBaseManager.shareInstance.fetchCryptocurrenciesWithNotifications()
+        currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
+        currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
+        currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
         currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
     }
     
@@ -48,6 +46,7 @@ class NotificationsViewController: UIViewController {
         view.backgroundColor = Constants.AppColors.appBackground
         
         notificationTableView.register(NotificationTableViewCell.self, forCellReuseIdentifier: NotificationTableViewCell.identifier)
+        notificationTableView.register(NotificationTableViewBottomCell.self, forCellReuseIdentifier: NotificationTableViewBottomCell.identifier)
         notificationTableView.register(NotificationTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: NotificationTableViewHeaderView.identifier)
         
         notificationTableView.separatorStyle = .none
@@ -72,7 +71,7 @@ class NotificationsViewController: UIViewController {
     
     private func setupTableView(){
         let sidePadding: CGFloat = 16
-        notificationTableView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 8).isActive = true
+        notificationTableView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 49).isActive = true
         notificationTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: sidePadding).isActive = true
         notificationTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -sidePadding).isActive = true
         notificationTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
@@ -101,64 +100,93 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        return 40
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45
+        return 50
     }
     
-//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//
-//        let mainView = UIView(frame: CGRect(x: 0, y: 0, width: notificationTableView.frame.width, height: 60))
-//        let topView = UIView(frame: CGRect(x: 0, y: 0, width: mainView.frame.width, height: 35))
-//
-//        topView.layer.cornerRadius = 20
-//        topView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-//
-//        mainView.backgroundColor = .none
-//        topView.backgroundColor = .white
-//
-//
-//        mainView.addSubview(topView)
-//
-//        return mainView
-//    }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 16
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let returnView: UIView = {
+            let view = UIView()
+            view.backgroundColor = .none
+            return view
+        }()
+        return returnView
+    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // TODO: OPTIMIZE!!!!!!
         
-//        let returnView = tableView.dequeueReusableHeaderFooterView(withIdentifier: NotificationTableViewHeaderView.identifier) as! NotificationTableViewHeaderView
+        let returnView = tableView.dequeueReusableHeaderFooterView(withIdentifier: NotificationTableViewHeaderView.identifier) as! NotificationTableViewHeaderView
         
-//        returnView.updateFieldWithData(data: currenciesWithNotifications[section])
+        returnView.updateFieldWithData(data: currenciesWithNotifications[section])
+        
+        if returnView.delegate == nil {
+            returnView.delegate = self
+        }
         
 //        let lol = NotificationTableViewHeaderView()
 //        lol.updateFieldWithData(data: currenciesWithNotifications[section])
         
-        let lol = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 80))
-        lol.backgroundColor = .red
+//        let lol = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 80))
+//        lol.backgroundColor = .red
         
-        return lol
+        return returnView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NotificationTableViewCell.identifier, for: indexPath) as? NotificationTableViewCell else{
-            fatalError("[CollectionView] - could't deque cell")
-        }
+        var cell: NotificationTableViewCell?
         
         let currencyIndex: Int = indexPath.section
         let notificationIndex: Int = indexPath.row
-        let notification = currenciesWithNotifications[currencyIndex].notifications[notificationIndex]
-        let lastCell: Bool = ( notificationIndex == (currenciesWithNotifications[currencyIndex].notifications.count - 1) ? true : false)
+        let notifications = currenciesWithNotifications[currencyIndex].notifications
         
-        // TODO: Fix needs better solution, has a bug on scroll!
-        if lastCell{
-            cell.dateLabel.textColor = .red
+        if notificationIndex == notifications.count-1 {
+            // Bottom(Last) Cell
+            guard let bottomCell = (tableView.dequeueReusableCell(withIdentifier: NotificationTableViewBottomCell.identifier, for: indexPath) as? NotificationTableViewBottomCell) else{
+                fatalError("[CollectionView] - could't deque bottom cell")
+            }
+            
+            cell = bottomCell
+        }else{
+            // Top or middle Cell
+            guard let middleCell = (tableView.dequeueReusableCell(withIdentifier: NotificationTableViewCell.identifier, for: indexPath) as? NotificationTableViewCell) else{
+                fatalError("[CollectionView] - could't deque middle cell")
+            }
+            
+            cell = middleCell
         }
         
-        cell.updateFieldWithData(data: notification, lastCell: lastCell)
+        // TODO: Fix needs better solution, has a bug on scroll!
+        cell!.updateFieldWithData(data: notifications[notificationIndex])
+        if cell?.delegate == nil {
+            cell?.delegate = self
+        }
         
-        return cell
+        
+        return cell!
+    }
+    
+    
+}
+
+//MARK: - Table view cell Section
+extension NotificationsViewController: NotificationTableViewCellDelegate{
+    func notificationStatusChanged(_ tableViewCell: NotificationTableViewCell, switch: UISwitch) {
+        print("Notification changed - controller")
+    }
+}
+
+//MARK: - Table view header Section
+extension NotificationsViewController: NotificationTableViewHeaderViewDelegate{
+    func notificationAddButtonPressed(tableViewHeaderView: NotificationTableViewHeaderView, button: UIButton) {
+        print("Add pressed - controller")
     }
     
     

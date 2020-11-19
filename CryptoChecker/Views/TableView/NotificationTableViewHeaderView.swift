@@ -7,10 +7,15 @@
 
 import UIKit
 
+protocol NotificationTableViewHeaderViewDelegate {
+    func notificationAddButtonPressed(tableViewHeaderView: NotificationTableViewHeaderView, button: UIButton)
+}
+
 class NotificationTableViewHeaderView: UITableViewHeaderFooterView {
     
     public static let identifier :String = "NotificationTableViewHeaderView"
-    let topViewHeight: CGFloat = 40
+    public var delegate: NotificationTableViewHeaderViewDelegate?
+    
     
     let currencyLabel: UILabel = {
         let label = UILabel()
@@ -21,13 +26,10 @@ class NotificationTableViewHeaderView: UITableViewHeaderFooterView {
         return label
     }()
     
-    let topSpacer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Constants.CurrencyCollection.Cell.Color.background
-        view.layer.cornerRadius = Constants.NotificationController.Cell.Size.cornerRadius
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        return view
+    let currencyImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     let addButton: UIButton = {
@@ -44,7 +46,10 @@ class NotificationTableViewHeaderView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = .none
+        contentView.backgroundColor = Constants.AppColors.ViewBackground.cell
+        
+        contentView.layer.cornerRadius = Constants.NotificationController.Cell.Size.cornerRadius
+        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
         configureContents()
     }
@@ -54,49 +59,40 @@ class NotificationTableViewHeaderView: UITableViewHeaderFooterView {
     }
     
     func configureContents() {
-        contentView.addSubview(topSpacer)
         contentView.addSubview(currencyLabel)
+        contentView.addSubview(currencyImageView)
         contentView.addSubview(addButton)
         
         NSLayoutConstraint.activate([
-            // Spacer
-            topSpacer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
-            topSpacer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            topSpacer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-            topSpacer.heightAnchor.constraint(equalToConstant: topViewHeight),
-            
             // Label
-            currencyLabel.topAnchor.constraint(equalTo: topSpacer.topAnchor, constant: 10),
+            currencyLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             currencyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
+            // TODO: Check why can't I set same height as currentLabel
+            
+            // Image
+            currencyImageView.leadingAnchor.constraint(equalTo: currencyLabel.trailingAnchor, constant: 4),
+            currencyImageView.centerYAnchor.constraint(equalTo: currencyLabel.centerYAnchor, constant: 0),
+//            currencyImageView.topAnchor.constraint(equalTo: currencyLabel.topAnchor, constant: 0),
+//            currencyImageView.bottomAnchor.constraint(equalTo: currencyLabel.bottomAnchor, constant: 0),
+            currencyImageView.heightAnchor.constraint(equalToConstant: 25),
+            currencyImageView.widthAnchor.constraint(equalTo: currencyImageView.heightAnchor, constant: 0),
+//            currencyImageView.heightAnchor.constraint(equalTo: currencyLabel.heightAnchor, constant: 0),
+            
             // Button
-            addButton.centerYAnchor.constraint(equalTo: topSpacer.centerYAnchor, constant: 3),
+            addButton.topAnchor.constraint(equalTo: currencyLabel.topAnchor, constant: -5),
             addButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
     }
     
     public func updateFieldWithData(data: Cryptocurrency)
     {
-        // currency Label
-        let currencyNameImageAttachmentString: NSAttributedString = {
-            let imageAttachment = NSTextAttachment()
-            let image: UIImage = data.image
-            
-            imageAttachment.image = image
-            
-            let imageOffsetY: CGFloat = -5
-            imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: 25, height: 25)
-            
-            return NSAttributedString(attachment: imageAttachment)
-        }()
-        
-        let currencyNameLabelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: (data.name + " ") )
-        currencyNameLabelAttributedString.append(currencyNameImageAttachmentString)
-        currencyLabel.attributedText = currencyNameLabelAttributedString
+        currencyImageView.image = data.image
+        currencyLabel.text = data.name
     }
     
     @objc func addButtonPressed(sender: UIButton){
-        print("Add button pressed - Cell")
+        delegate?.notificationAddButtonPressed(tableViewHeaderView: self, button: addButton)
     }
 
     /*

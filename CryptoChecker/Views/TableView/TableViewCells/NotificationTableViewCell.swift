@@ -7,10 +7,26 @@
 
 import UIKit
 
+protocol NotificationTableViewCellDelegate {
+    func notificationStatusChanged(_ tableViewCell: NotificationTableViewCell, switch: UISwitch)
+}
+
 class NotificationTableViewCell: UITableViewCell {
+
+    class var identifier: String{
+        return "NotificationTitleTableViewCell"
+    }
+//    public static let identifier: String = {
+//        return identifierName
+//    }()
     
-    public static let identifier :String = "NotificationTitleTableViewCell"
-    var lastCell: Bool = false
+    public var delegate: NotificationTableViewCellDelegate?
+    
+    let valueChangeDirectionImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -50,78 +66,88 @@ class NotificationTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = Constants.AppColors.ViewBackground.cell
-        
+        contentView.backgroundColor = Constants.AppColors.ViewBackground.cell
+//        contentView.backgroundColor = .red
+//        contentView.layer.borderWidth = 1
+//        contentView.layer.borderColor = UIColor.black.cgColor
+        backgroundColor = .none
+        backgroundView = UIView()
+
         configureContents()
     }
     
     private func configureContents(){
+        contentView.addSubview(valueChangeDirectionImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(dateLabel)
         contentView.addSubview(statusSwitch)
         
-        statusSwitch.addTarget(self, action: #selector(notificationStatusChanged(sender:)), for: .valueChanged)
+        statusSwitch.addTarget(self, action: #selector(toggleSwitchChangedValue(sender:)), for: .valueChanged)
 //        statusSwitch.transform = CGAffineTransform(scaleX: 50, y: 20)
 
         
         NSLayoutConstraint.activate([
+            // Value Direction Image
+            valueChangeDirectionImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            valueChangeDirectionImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            valueChangeDirectionImageView.heightAnchor.constraint(equalToConstant: 18),
+            valueChangeDirectionImageView.widthAnchor.constraint(equalTo: valueChangeDirectionImageView.heightAnchor, constant: 0),
+            
             // Title
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleLabel.centerYAnchor.constraint(equalTo: valueChangeDirectionImageView.centerYAnchor, constant: 0),
+            titleLabel.leadingAnchor.constraint(equalTo: valueChangeDirectionImageView.trailingAnchor, constant: 3),
             
             // Date
             dateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0),
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16+18+5),
+            dateLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 0),
             
             // Switch
-            statusSwitch.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 2),
+            statusSwitch.topAnchor.constraint(equalTo: valueChangeDirectionImageView.topAnchor, constant: 0),
             statusSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
+        
     }
     
-    public func updateFieldWithData(data: Cryptocurrency.CurrencyNotification, lastCell: Bool)
+    public func updateFieldWithData(data: Cryptocurrency.CurrencyNotification)
     {
+        // TODO: OPTIMIZE!!!!!
         
-        // TODO: OPTIMIZE!!!!!!
-        self.lastCell = lastCell
+        var valueChangedColor: UIColor
+        var notificationValueDirection: String
         
-        let valueChangedColor: UIColor = (data.aboveValue ? Constants.NotificationController.Cell.Color.above : Constants.NotificationController.Cell.Color.below)
-        let valueChangedImage: UIImage = (data.aboveValue ? Constants.CurrencyCollection.Cell.Images.valueChangeAbove : Constants.CurrencyCollection.Cell.Images.valueChangeBelow)
-        
+        if data.aboveValue {
+            notificationValueDirection = "Above"
+            valueChangedColor = Constants.NotificationController.Cell.Color.above
+            valueChangeDirectionImageView.image = Constants.NotificationController.Cell.Image.above
+        }else{
+            notificationValueDirection = "Below"
+            valueChangedColor = Constants.NotificationController.Cell.Color.below
+            valueChangeDirectionImageView.image = Constants.NotificationController.Cell.Image.below
+        }
+        // Value direction image
+        valueChangeDirectionImageView.tintColor = valueChangedColor
+                        
         // Title Label
-        let notificationValueDirection: String = ( data.aboveValue ? " Above" : " Below" )
-        
-        let currencySymbolImageAttachmentString: NSAttributedString = {
-            let imageAttachment = NSTextAttachment()
-            var image: UIImage = valueChangedImage
-            image = image.withTintColor( valueChangedColor )
-            
-            imageAttachment.image = image
-            
-            let imageOffsetY: CGFloat = -3
-            imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: 18, height: 18)
-            return NSAttributedString(attachment: imageAttachment)
-        }()
-        
         let currencySymbolValueChangeAttachmentString: NSAttributedString = {
-            let valueAtribute = [NSAttributedString.Key.foregroundColor: valueChangedColor, NSAttributedString.Key.font: Constants.NotificationController.Cell.Font.notificationTitle, NSAttributedString.Key.baselineOffset : 0] as [NSAttributedString.Key : Any]
+            let valueAtribute = [NSAttributedString.Key.foregroundColor: valueChangedColor, NSAttributedString.Key.font: Constants.NotificationController.Cell.Font.notificationTitle]
+            
             let attributedString: NSAttributedString = NSAttributedString(string: ( notificationValueDirection ), attributes: valueAtribute)
             
             return attributedString
         }()
         
-        let currencySymbolLabelAttributedString: NSMutableAttributedString = NSMutableAttributedString()
-        currencySymbolLabelAttributedString.append(currencySymbolImageAttachmentString)
-        currencySymbolLabelAttributedString.append(currencySymbolValueChangeAttachmentString)
+        let currencySymbolLabelAttributedString: NSMutableAttributedString = NSMutableAttributedString(attributedString: currencySymbolValueChangeAttachmentString)
         currencySymbolLabelAttributedString.append(NSMutableAttributedString(string: " " + data.getSetValueAsString() + " " + data.currencyType) )
         
         titleLabel.attributedText = currencySymbolLabelAttributedString
         
+        dateLabel.text = "Creation date " + data.date
+        
         statusSwitch.setOn(data.isOn, animated: false)
     }
-
-    @objc func notificationStatusChanged(sender: UISwitch){
-        print("Notification status changed - cell")
+    
+    @objc private func toggleSwitchChangedValue(sender: UISwitch){
+        delegate?.notificationStatusChanged(self, switch: statusSwitch)
     }
     
     required init?(coder: NSCoder) {

@@ -26,13 +26,39 @@ class NavigationUITabBarViewController: UITabBarController {
         
         let tabBarList = [ firstViewController, secondViewController, thirdViewController, fourthViewController]
         
+        let meme: UIView = {
+            let returnView = UIView()
+            returnView.backgroundColor = .red
+            returnView.translatesAutoresizingMaskIntoConstraints = false
+            
+            
+            return returnView
+        }()
+        
+        view.addSubview(meme)
+        
+        NSLayoutConstraint.activate([
+            meme.heightAnchor.constraint(equalToConstant: (self.view.frame.maxY - self.tabBar.frame.maxY)),
+            meme.widthAnchor.constraint(equalToConstant: 50),
+            meme.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            meme.topAnchor.constraint(equalTo: view.topAnchor, constant: 0)
+        ])
+        
+        let tabViewHeight = self.tabBar.frame.height
+//        let imageHeight = firstViewController.tabBarItem.
+        
+        
         
         // TODO: Calculate offset for other devices aswell !
+        
+
+        let topOffset = CGFloat(5.0)
+        
         for controller in tabBarList[1...] {
-            controller.tabBarItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: -18, right: 0);
+            controller.tabBarItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: -topOffset, right: 0);
         }
         
-        firstViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -14, right: 0);
+        firstViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -topOffset+4, right: 0);
         
         viewControllers = tabBarList
         selectedViewController = thirdViewController

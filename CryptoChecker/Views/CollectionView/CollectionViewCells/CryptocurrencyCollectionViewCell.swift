@@ -35,6 +35,12 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    let currencyValueChangeDirectionImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let currencyValueLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -56,16 +62,9 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
         
         backgroundColor = Constants.CurrencyCollection.Cell.Color.background
         layer.cornerRadius = Constants.CurrencyCollection.Cell.ViewSizes.cellCornerRadius
-                
-        addSubview(currencyNameLabel)
-        addSubview(currencyTextSymbolLabel)
-        addSubview(currencyValueLabel)
-        addSubview(currencyWatchlistButton)
+
         
-        
-//        testingViews()
-        
-        setupLayout()
+        configureContents()
         
         currencyWatchlistButton.setBackgroundImage(Constants.CurrencyCollection.Cell.Images.notAddedWatchlist, for: .normal)
         currencyWatchlistButton.setBackgroundImage(Constants.CurrencyCollection.Cell.Images.addedWatchlist, for: .selected)
@@ -134,65 +133,19 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func testingViews(){
-        let currencyNameImageAttachmentString: NSAttributedString = {
-            let imageAttachment = NSTextAttachment()
-            var image: UIImage = UIImage(systemName: "bitcoinsign.circle.fill")!
-            image = image.withTintColor(.systemIndigo)
-            
-            imageAttachment.image = image
-            
-            let imageOffsetY: CGFloat = -3
-            imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: imageAttachment.image!.size.width, height: imageAttachment.image!.size.height)
-            
-            return NSAttributedString(attachment: imageAttachment)
-        }()
-        
-        let currencyNameLabelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: "Bitcoin ")
-        currencyNameLabelAttributedString.append(currencyNameImageAttachmentString)
-        currencyNameLabel.attributedText = currencyNameLabelAttributedString
-        
-        let currencySymbolImageAttachmentString: NSAttributedString = {
-            let imageAttachment = NSTextAttachment()
-            var image: UIImage = Constants.CurrencyCollection.Cell.Images.valueChangeAbove
-            image = image.withTintColor(Constants.CurrencyCollection.Cell.Color.valueChangeAbove)
-            
-            imageAttachment.image = image
-            
-            let imageOffsetY: CGFloat = 0
-            imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: 10, height: 10)
-            return NSAttributedString(attachment: imageAttachment)
-        }()
-        
-        let currencySymbolValueChangeAttachmentString: NSAttributedString = {
-            let valueAtribute = [NSAttributedString.Key.foregroundColor: Constants.CurrencyCollection.Cell.Color.valueChangeAbove, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10.0), NSAttributedString.Key.baselineOffset : 1] as [NSAttributedString.Key : Any]
-            let attributedString: NSAttributedString = NSAttributedString(string: " 0.7%", attributes: valueAtribute)
-            
-            return attributedString
-        }()
-        
-        let currencySymbolLabelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: "BTC ")
-        currencySymbolLabelAttributedString.append(currencySymbolImageAttachmentString)
-        currencySymbolLabelAttributedString.append(currencySymbolValueChangeAttachmentString)
-        
-        currencyTextSymbolLabel.attributedText = currencySymbolLabelAttributedString
-        
-        currencyValueLabel.text = "34254.34"
-        
-        currencyWatchlistButton.setBackgroundImage(Constants.CurrencyCollection.Cell.Images.notAddedWatchlist, for: .normal)
-        currencyWatchlistButton.setBackgroundImage(Constants.CurrencyCollection.Cell.Images.addedWatchlist, for: .selected)
-//        contentView.isUserInteractionEnabled = false
-//        currencyWatchlistButton.backgroundColor = .red
-
-    }
-    
     @objc private func watchlistButtonPressed(sender: UIButton){
         if let currentDelegate = self.delegate {
             currentDelegate.watchlistButtonPressed(self, button: sender)
         }
     }
     
-    private func setupLayout(){
+    private func configureContents(){
+        addSubview(currencyNameLabel)
+        addSubview(currencyTextSymbolLabel)
+        addSubview(currencyValueChangeDirectionImageView)
+        addSubview(currencyValueLabel)
+        addSubview(currencyWatchlistButton)
+        
         let sidePadding:CGFloat = 15
         let heightPadding: CGFloat = 8
         
@@ -225,6 +178,15 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
             //height
             NSLayoutConstraint(item: currencyTextSymbolLabel, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: (contentView.frame.height - (2 * heightPadding)) / 2)
             ])
+        
+        // currency change direction image
+        
+        NSLayoutConstraint.activate([
+            currencyValueChangeDirectionImageView.leadingAnchor.constraint(equalTo: currencyTextSymbolLabel.trailingAnchor, constant: 0),
+            currencyValueChangeDirectionImageView.bottomAnchor.constraint(equalTo: currencyTextSymbolLabel.bottomAnchor, constant: 0),
+            currencyValueChangeDirectionImageView.heightAnchor.constraint(equalToConstant: 10),
+            currencyValueChangeDirectionImageView.widthAnchor.constraint(equalTo: currencyValueChangeDirectionImageView.heightAnchor, constant: 0),
+        ])
         
         // Value constraints
         addConstraints([

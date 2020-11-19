@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		368E0C782566B182009DF52F /* NotificationTableViewBottomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368E0C772566B181009DF52F /* NotificationTableViewBottomCell.swift */; };
 		36A088C02561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088BF2561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift */; };
 		36A088CC2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088CB2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift */; };
 		36A088D12561D89900C8B3CA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088D02561D89900C8B3CA /* Constants.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		368E0C772566B181009DF52F /* NotificationTableViewBottomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewBottomCell.swift; sourceTree = "<group>"; };
 		36A088BF2561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptocurrencyCollectionViewCell.swift; sourceTree = "<group>"; };
 		36A088CB2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptocurrenciesUICollectionView.swift; sourceTree = "<group>"; };
 		36A088D02561D89900C8B3CA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = ../../../../../Downloads/Constants.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				36A089112565A85B00C8B3CA /* NotificationTableViewCell.swift */,
+				368E0C772566B181009DF52F /* NotificationTableViewBottomCell.swift */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				36A088FD2564920300C8B3CA /* PreferenceTextBased.swift in Sources */,
 				36A088DD25633BD600C8B3CA /* WatchlistViewController.swift in Sources */,
 				36A088E325643A9C00C8B3CA /* NotificationsViewController.swift in Sources */,
+				368E0C782566B182009DF52F /* NotificationTableViewBottomCell.swift in Sources */,
 				36F6258B25604F02007EFA32 /* SceneDelegate.swift in Sources */,
 				36A088F52564898200C8B3CA /* PreferenceTextBasedCollectionViewCell.swift in Sources */,
 				36A088D62561E77300C8B3CA /* Extentions.swift in Sources */,
