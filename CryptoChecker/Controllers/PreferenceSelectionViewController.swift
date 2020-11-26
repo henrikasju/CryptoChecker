@@ -57,7 +57,6 @@ class PreferenceSelectionViewController: UIViewController {
         
         setupTitleLabel()
         setupSelectionCollectionView()
-        
     }
     
     private func setupTitleLabel(){

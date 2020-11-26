@@ -61,7 +61,7 @@ class NavigationUITabBarViewController: UITabBarController {
         firstViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -topOffset+4, right: 0);
         
         viewControllers = tabBarList
-        selectedViewController = firstViewController
+        selectedViewController = thirdViewController
     }
     
 

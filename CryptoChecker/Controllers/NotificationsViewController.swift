@@ -26,6 +26,8 @@ class NotificationsViewController: UIViewController {
         return tableView
     }()
     
+    var addNotificationTransitioningDelegate = NotificationTransitioningDelegate()
+    
     private var currenciesWithNotifications: [Cryptocurrency] = []
     
     override func viewWillAppear(_ animated: Bool) {
@@ -185,9 +187,17 @@ extension NotificationsViewController: NotificationTableViewCellDelegate{
 
 //MARK: - Table view header Section
 extension NotificationsViewController: NotificationTableViewHeaderViewDelegate{
+    
     func notificationAddButtonPressed(tableViewHeaderView: NotificationTableViewHeaderView, button: UIButton) {
         print("Add pressed - controller")
+        
+        var vc = AddNotificationViewController()
+//        vc.setNavi = self.navigationController
+        addNotificationTransitioningDelegate.transitionDirection = .fromBottom
+        vc.transitioningDelegate = addNotificationTransitioningDelegate
+        vc.modalPresentationStyle = .custom
+
+        navigationController?.present(vc, animated: true, completion: nil)
     }
-    
     
 }
