@@ -127,7 +127,7 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         
         let returnView = tableView.dequeueReusableHeaderFooterView(withIdentifier: NotificationTableViewHeaderView.identifier) as! NotificationTableViewHeaderView
         
-        returnView.updateFieldWithData(data: currenciesWithNotifications[section])
+        returnView.updateFieldWithData(data: currenciesWithNotifications[section], sectionId: section)
         
         if returnView.delegate == nil {
             returnView.delegate = self
@@ -191,12 +191,14 @@ extension NotificationsViewController: NotificationTableViewHeaderViewDelegate{
     func notificationAddButtonPressed(tableViewHeaderView: NotificationTableViewHeaderView, button: UIButton) {
         print("Add pressed - controller")
         
+//        var idk = tableViewHeaderView
+        
         var vc = AddNotificationViewController()
 //        vc.setNavi = self.navigationController
         addNotificationTransitioningDelegate.transitionDirection = .fromBottom
         vc.transitioningDelegate = addNotificationTransitioningDelegate
         vc.modalPresentationStyle = .custom
-
+        vc.data = currenciesWithNotifications[tableViewHeaderView.id]
         navigationController?.present(vc, animated: true, completion: nil)
     }
     

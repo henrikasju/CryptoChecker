@@ -15,7 +15,7 @@ class NotificationTableViewHeaderView: UITableViewHeaderFooterView {
     
     public static let identifier :String = "NotificationTableViewHeaderView"
     public var delegate: NotificationTableViewHeaderViewDelegate?
-    
+    public var id: Int = -1
     
     let currencyLabel: UILabel = {
         let label = UILabel()
@@ -85,10 +85,11 @@ class NotificationTableViewHeaderView: UITableViewHeaderFooterView {
         ])
     }
     
-    public func updateFieldWithData(data: Cryptocurrency)
+    public func updateFieldWithData(data: Cryptocurrency, sectionId: Int)
     {
         currencyImageView.image = data.image
         currencyLabel.text = data.name
+        self.id = sectionId
     }
     
     @objc func addButtonPressed(sender: UIButton){

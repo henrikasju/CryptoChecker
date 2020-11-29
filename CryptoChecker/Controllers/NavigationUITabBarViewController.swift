@@ -23,35 +23,9 @@ class NavigationUITabBarViewController: UITabBarController {
         thirdViewController.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "notifications"), tag: 3)
         fourthViewController.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "profile"), tag: 4)
         
-        
-        let tabBarList = [ firstViewController, secondViewController, thirdViewController, fourthViewController]
-        
-        let meme: UIView = {
-            let returnView = UIView()
-            returnView.backgroundColor = .red
-            returnView.translatesAutoresizingMaskIntoConstraints = false
-            
-            
-            return returnView
-        }()
-        
-        view.addSubview(meme)
-        
-        NSLayoutConstraint.activate([
-            meme.heightAnchor.constraint(equalToConstant: (self.view.frame.maxY - self.tabBar.frame.maxY)),
-            meme.widthAnchor.constraint(equalToConstant: 50),
-            meme.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            meme.topAnchor.constraint(equalTo: view.topAnchor, constant: 0)
-        ])
-        
-//        let tabViewHeight = self.tabBar.frame.height
-//        let imageHeight = firstViewController.tabBarItem.
-        
-        
+        let tabBarList = [ firstViewController, secondViewController, thirdViewController, fourthViewController ]
         
         // TODO: Calculate offset for other devices aswell !
-        
-
         let topOffset = CGFloat(5.0)
         
         for controller in tabBarList[1...] {
@@ -63,16 +37,5 @@ class NavigationUITabBarViewController: UITabBarController {
         viewControllers = tabBarList
         selectedViewController = thirdViewController
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
