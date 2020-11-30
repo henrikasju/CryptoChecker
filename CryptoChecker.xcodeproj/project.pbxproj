@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		361ED8A125758AA10064E7F9 /* CurrencyDisplaySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A025758AA10064E7F9 /* CurrencyDisplaySelectionView.swift */; };
+		361ED8A4257593EE0064E7F9 /* CurrencyGraphSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */; };
 		3644062F256FF4B200990D93 /* NotificationPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3644062E256FF4B200990D93 /* NotificationPresentationController.swift */; };
 		3644063225700EF600990D93 /* NotificationTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3644063125700EF600990D93 /* NotificationTransitioningDelegate.swift */; };
 		364406352570552500990D93 /* NotificationAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364406342570552500990D93 /* NotificationAnimatedTransitioning.swift */; };
@@ -40,6 +42,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		361ED8A025758AA10064E7F9 /* CurrencyDisplaySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDisplaySelectionView.swift; sourceTree = "<group>"; };
+		361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyGraphSectionView.swift; sourceTree = "<group>"; };
 		3644062E256FF4B200990D93 /* NotificationPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPresentationController.swift; sourceTree = "<group>"; };
 		3644063125700EF600990D93 /* NotificationTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTransitioningDelegate.swift; sourceTree = "<group>"; };
 		364406342570552500990D93 /* NotificationAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAnimatedTransitioning.swift; sourceTree = "<group>"; };
@@ -112,6 +116,8 @@
 				36A0891A2565F61C00C8B3CA /* CollectionView */,
 				36A089192565F60400C8B3CA /* TableView */,
 				36A088DF25634B2300C8B3CA /* CustomUITabBarItem.swift */,
+				361ED8A025758AA10064E7F9 /* CurrencyDisplaySelectionView.swift */,
+				361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -119,14 +125,14 @@
 		36A088B925617A5100C8B3CA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				3600DC132574249D007D374B /* AddNotification */,
-				36F6258C25604F02007EFA32 /* CryptocurrenciesViewController.swift */,
 				36A088D9256334DC00C8B3CA /* NavigationUITabBarViewController.swift */,
+				36F6258C25604F02007EFA32 /* CryptocurrenciesViewController.swift */,
+				36440637257135F700990D93 /* CryptocurrencyDetailViewController.swift */,
 				36A088DC25633BD600C8B3CA /* WatchlistViewController.swift */,
 				36A088E225643A9C00C8B3CA /* NotificationsViewController.swift */,
+				3600DC132574249D007D374B /* AddNotification */,
 				36A088E525644C6000C8B3CA /* ProfileViewController.swift */,
 				36A0890625657D3600C8B3CA /* PreferenceSelectionViewController.swift */,
-				36440637257135F700990D93 /* CryptocurrencyDetailViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -312,9 +318,11 @@
 				36440638257135F700990D93 /* CryptocurrencyDetailViewController.swift in Sources */,
 				3644063225700EF600990D93 /* NotificationTransitioningDelegate.swift in Sources */,
 				368E0C782566B182009DF52F /* NotificationTableViewBottomCell.swift in Sources */,
+				361ED8A125758AA10064E7F9 /* CurrencyDisplaySelectionView.swift in Sources */,
 				36F6258B25604F02007EFA32 /* SceneDelegate.swift in Sources */,
 				36A088F52564898200C8B3CA /* PreferenceTextBasedCollectionViewCell.swift in Sources */,
 				36A088D62561E77300C8B3CA /* Extentions.swift in Sources */,
+				361ED8A4257593EE0064E7F9 /* CurrencyGraphSectionView.swift in Sources */,
 				364406352570552500990D93 /* NotificationAnimatedTransitioning.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

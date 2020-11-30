@@ -77,6 +77,13 @@ class CryptocurrenciesViewController: UIViewController {
         if !firstViewLoad{
             currencyCollectionView.reloadData()
         }
+        
+//        tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
     }
 
     override func viewDidLoad() {
@@ -92,6 +99,8 @@ class CryptocurrenciesViewController: UIViewController {
         view.addSubview(fiatButton)
         view.addSubview(bitcoinButton)
         view.addSubview(currencyCollectionView)
+        
+        navigationItem.backButtonTitle = "Cryptocurrencies"
         
         setupTitleLabel()
         setupButtons()
@@ -163,7 +172,14 @@ extension CryptocurrenciesViewController: UICollectionViewDelegate, UICollection
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Pressing collection view cell")
+
+        let selectedCurrencyIndex = indexPath.row
+        let dataToPass = cryptocurrencies[selectedCurrencyIndex]
+        let vc = CryptocurrencyDetailViewController()
+        vc.data = dataToPass
+        vc.hidesBottomBarWhenPushed = true;
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
 }
