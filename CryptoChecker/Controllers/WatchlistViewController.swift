@@ -81,6 +81,7 @@ class WatchlistViewController: UIViewController {
         super.viewDidLoad()
         
         firstViewLoad = false
+        navigationItem.backButtonTitle = "Watchlist"
 
         view.backgroundColor = Constants.AppColors.appBackground
         
@@ -169,7 +170,13 @@ extension WatchlistViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Pressing collection view cell")
+        let selectedCurrencyIndex = indexPath.row
+        let dataToPass = watchlistedCurrencies[selectedCurrencyIndex]
+        let vc = CryptocurrencyDetailViewController()
+        vc.data = dataToPass
+        vc.hidesBottomBarWhenPushed = true;
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
 }

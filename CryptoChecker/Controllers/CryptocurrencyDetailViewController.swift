@@ -83,6 +83,7 @@ class CryptocurrencyDetailViewController: UIViewController {
         
     var data: Cryptocurrency?
     private var representDataToFiat: Bool = true
+    private var selectedTimelineButton: GraphTimelineSelectionButton?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -101,26 +102,40 @@ class CryptocurrencyDetailViewController: UIViewController {
         
         view.backgroundColor = Constants.AppColors.appBackground
         
-        print(data?.name)
         guard let availableData = data else {
             fatalError("Error in accessing data at CryptocurrencyDetailViewController!")
         }
+        
+        guard let firstTimelineButton = currencyGraphSectionView.timelineSelectionButtons.first else {
+            fatalError("Error accessing button in currencyGraphSectionView.timelineSelectionButtons!")
+        }
+        selectedTimelineButton = firstTimelineButton
         
         configureContents()
         setupViewData(currentData: availableData)
     }
     
     func setupViewData(currentData: Cryptocurrency){
+        navigationItem.backButtonTitle = currentData.name
+        
         tabBarCustomButtom.isSelected = currentData.watchlisted
         
         currencyTitleLabel.text = currentData.name
         currencyImageView.image = currentData.image
         
-        let currentPriceValue = String((representDataToFiat ? currentData.valueFiat : currentData.valueBitcoin))
+        let currentPriceValue = (representDataToFiat ? currentData.getFiatValueAsString() : currentData.getBitcoinValueAsString())
         let currentCurrencySymbol = String((representDataToFiat ? "$" : "₿"))
         let currentPriceLabel = currentPriceValue + " " + currentCurrencySymbol
         
-        currencyGraphSectionView.setupViewWithData(currentPrice: currentPriceLabel)
+        currencyGraphSectionView.updateViewWithData(currentPrice: currentPriceLabel)
+    }
+    
+    private func updateViewData(currentData: Cryptocurrency) {
+        let currentPriceValue = (representDataToFiat ? currentData.getFiatValueAsString() : currentData.getBitcoinValueAsString())
+        let currentCurrencySymbol = String((representDataToFiat ? "$" : "₿"))
+        let currentPriceLabel = currentPriceValue + " " + currentCurrencySymbol
+        
+        currencyGraphSectionView.updateViewWithData(currentPrice: currentPriceLabel)
     }
     
     func configureContents() {
@@ -128,8 +143,16 @@ class CryptocurrencyDetailViewController: UIViewController {
         tabBarCustomButtom.addTarget(self, action: #selector(watchlistButtonPressed(sender:)), for: .touchUpInside)
         navigationItem.rightBarButtonItem = tabBarRightItem
         
+        currencyDisplaySelectionView.setTargetToButtons(target: self, action: #selector(currencyConversionButtonPressed(sender:)), event: .touchUpInside)
+        
+        for timelineButton in currencyGraphSectionView.timelineSelectionButtons {
+            timelineButton.addTarget(self, action: #selector(graphTimelineChanged(sender:)), for: .touchUpInside)
+        }
+        
         currencyDetailsCollectionView.delegate = self
         currencyDetailsCollectionView.dataSource = self
+        currencyDetailsCollectionView.register(CurrencyDetailCollectionViewCell.self, forCellWithReuseIdentifier: CurrencyDetailCollectionViewCell.identifier)
+        currencyDetailsCollectionView.register(CurrencyDetailHeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CurrencyDetailHeaderCollectionReusableView.identifier)
         
         openNotificationsButton.addTarget(self, action: #selector(openNotificatonsButtonPressed(sender:)), for: .touchUpInside)
         
@@ -167,7 +190,97 @@ class CryptocurrencyDetailViewController: UIViewController {
             openNotificationsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             openNotificationsButton.heightAnchor.constraint(equalToConstant: 50),
         ])
+        
+        currencyDetailsCollectionView.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     }
+}
+
+//MARK: - DetailsCollectionView Section
+extension CryptocurrencyDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if let availableData = self.data {
+            return availableData.detailSections.count
+        }
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let availableSections = self.data?.detailSections[section] {
+            return availableSections.details.count
+        }
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let insetPadding: CGFloat = collectionView.contentInset.left + collectionView.contentInset.right
+        let horizontalSpacing: CGFloat = 8
+        let finalWidth: CGFloat = ((collectionView.frame.width - insetPadding) / 2) - horizontalSpacing
+        let finalHeight: CGFloat = 20
+        
+        return CGSize(width: finalWidth, height: finalHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        
+        return CGSize(width: collectionView.frame.width, height: 30)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 6, left: 0, bottom: 10, right: 0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CurrencyDetailHeaderCollectionReusableView.identifier, for: indexPath) as? CurrencyDetailHeaderCollectionReusableView, let headerTitle = data?.detailSections[indexPath.section].title else{
+                fatalError("Error: invalid supplementary view type!")
+            }
+            
+            headerView.headerTitleLabel.text = headerTitle
+            
+            return headerView
+            
+        default:
+            fatalError("Error: Inavlid supplementary view kind!")
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CurrencyDetailCollectionViewCell.identifier, for: indexPath) as? CurrencyDetailCollectionViewCell, let cellDetail = data?.detailSections[indexPath.section].details[indexPath.row] else{
+            fatalError("[CollectionView] - Error dequeing cell")
+        }
+        
+        let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
+        
+        if let textDetail = cellDetail as? Cryptocurrency.CurrencyDetailSection.CurrencyTextDetail {
+            if let stringDetail = textDetail.detailValue {
+                cell.updateFieldWithData(title: textDetail.detailTitle, detail: stringDetail, atributedDetail: nil)
+            }else if let atributedStringDetail = textDetail.atributedValue {
+                cell.updateFieldWithData(title: textDetail.detailTitle, detail: nil, atributedDetail: atributedStringDetail)
+            }
+        }else if let valueDetail = cellDetail as? Cryptocurrency.CurrencyDetailSection.CurrencyValueDetail {
+            if self.representDataToFiat {
+                cell.updateFieldWithData(title: valueDetail.detailTitle, detail: valueDetail.getFiatValueAsString()+currentCurrencySymbol, atributedDetail: nil)
+            }else{
+                cell.updateFieldWithData(title: valueDetail.detailTitle, detail: valueDetail.getCryptoValueAsString()+currentCurrencySymbol, atributedDetail: nil)
+            }
+        }
+        
+        
+        return cell
+    }
+}
+
+//MARK: - Button Action Section
+extension CryptocurrencyDetailViewController{
     
     @objc func watchlistButtonPressed(sender: UIButton){
         guard let availableData = data else{
@@ -183,19 +296,62 @@ class CryptocurrencyDetailViewController: UIViewController {
         }
     }
     
-    @objc func openNotificatonsButtonPressed(sender: UIButton){
-        print("Open notification Button pressed!")
-    }
+    @objc func currencyConversionButtonPressed(sender: UIButton){
+        
+        if sender == currencyDisplaySelectionView.fiatButton {
+            representDataToFiat = true
+            currencyDisplaySelectionView.fiatButton.isSelected = true
+            currencyDisplaySelectionView.fiatButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
+            
+            currencyDisplaySelectionView.cryptoButton.isSelected = false
+            currencyDisplaySelectionView.cryptoButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
 
-}
-
-//MARK: - DetailsCollectionView Section
-extension CryptocurrencyDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        }else if sender == currencyDisplaySelectionView.cryptoButton {
+            representDataToFiat = false
+            currencyDisplaySelectionView.fiatButton.isSelected = false
+            currencyDisplaySelectionView.fiatButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
+            
+            currencyDisplaySelectionView.cryptoButton.isSelected = true
+            currencyDisplaySelectionView.cryptoButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
+        }
+        
+        if(sender == currencyDisplaySelectionView.fiatButton || sender == currencyDisplaySelectionView.cryptoButton){
+            // UPDATE
+            guard let availableData = data else {
+                fatalError("Error in accessing data at CryptocurrencyDetailViewController!")
+            }
+            
+            updateViewData(currentData: availableData)
+            
+            currencyDetailsCollectionView.reloadData()
+        }
+        
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+    @objc func graphTimelineChanged(sender: GraphTimelineSelectionButton){
+        print("Changed Timelime to: ", sender.timelineRepresentation)
+        
+        if sender == selectedTimelineButton {
+            return
+        }
+        
+        sender.setButtonSelectionStatus(isSelected: true)
+        
+        selectedTimelineButton!.setButtonSelectionStatus(isSelected: false)
+        selectedTimelineButton = sender
     }
+    
+    @objc func openNotificatonsButtonPressed(sender: UIButton){
+        print("Open notification Button pressed!")
+        guard let availableCurrency = data else {
+            fatalError("Error accessing data in CryptocurrencyDetailViewController")
+        }
+        
+        let vc = NotificationsViewController()
+        vc.showAllCurrencies = false
+        vc.currenciesWithNotifications = [availableCurrency]
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
 }

@@ -10,6 +10,28 @@ import UIKit
 // TODO: Fix almost everything
 final class DataBaseManager{
     
+    private var detailSections: [Cryptocurrency.CurrencyDetailSection] = {
+        let details1: [Cryptocurrency.CurrencyDetailSection.CurrencyDetail] = [
+            Cryptocurrency.CurrencyDetailSection.CurrencyValueDetail(detailTitle: "Open", fiatValue: 312.22, cryptoValue: 0.10),
+            Cryptocurrency.CurrencyDetailSection.CurrencyValueDetail(detailTitle: "Close", fiatValue: 312.22, cryptoValue: 0.10),
+            Cryptocurrency.CurrencyDetailSection.CurrencyValueDetail(detailTitle: "High", fiatValue: 312.25, cryptoValue: 0.1001),
+            Cryptocurrency.CurrencyDetailSection.CurrencyValueDetail(detailTitle: "Low", fiatValue: 312.21, cryptoValue: 0.09999),
+            Cryptocurrency.CurrencyDetailSection.CurrencyValueDetail(detailTitle: "Average", fiatValue: 312.23, cryptoValue: 0.10001),
+            Cryptocurrency.CurrencyDetailSection.CurrencyTextDetail(detailTitle: "Change", detailValue: nil, atributedValue: NSAttributedString(string: "0.7%"))
+        ]
+        let detailSection1 = Cryptocurrency.CurrencyDetailSection(title: "Price", details: details1)
+        
+        let details2: [Cryptocurrency.CurrencyDetailSection.CurrencyDetail] = [
+            Cryptocurrency.CurrencyDetailSection.CurrencyTextDetail(detailTitle: "Market Cap", detailValue: "44.64 Bn", atributedValue: nil),
+            Cryptocurrency.CurrencyDetailSection.CurrencyTextDetail(detailTitle: "Circulating", detailValue: "113.17 M", atributedValue: nil),
+            Cryptocurrency.CurrencyDetailSection.CurrencyTextDetail(detailTitle: "Max Supply", detailValue: "N/A", atributedValue: nil),
+            Cryptocurrency.CurrencyDetailSection.CurrencyTextDetail(detailTitle: "Rank", detailValue: "2", atributedValue: nil)
+        ]
+        let detailSection2 = Cryptocurrency.CurrencyDetailSection(title: "Market Stats", details: details2)
+        
+        return [detailSection1, detailSection2]
+    }()
+    
     private var data: [Cryptocurrency] = [
         Cryptocurrency(name: "Bitcoin", symbolName: "BTC", image: #imageLiteral(resourceName: "btc"), valueFiat: 20031.23, valueBitcoin: 1, valueChange: 2.3, watchlisted: false),
         Cryptocurrency(name: "Ethereum", symbolName: "ETC", image: #imageLiteral(resourceName: "etc"), valueFiat: 312.23, valueBitcoin: 0.1, valueChange: 0.7, watchlisted: true),
@@ -60,6 +82,9 @@ final class DataBaseManager{
     }()
     
     public func fetchCryptocurrencies() -> [Cryptocurrency]{
+        for currency in data {
+            currency.detailSections = detailSections
+        }
         return data
     }
     
@@ -86,9 +111,11 @@ final class DataBaseManager{
     }
     
     public func updateData(_ old: Cryptocurrency, to: Cryptocurrency){
-        let index: Int = data.firstIndex(of: old)!
-        
-        data[index] = to
+        if let index: Int = data.firstIndex(of: old){
+            data[index] = to
+        }else{
+            fatalError("Error: Could not access data!")
+        }
     }
     
     

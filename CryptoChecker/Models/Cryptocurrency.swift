@@ -37,6 +37,62 @@ class Cryptocurrency: NSObject {
         }
     }
     
+    class CurrencyDetailSection: NSObject {
+        
+        class CurrencyDetail: NSObject {
+            var detailTitle: String
+//            var detailValue: String
+//            var atributedValue: NSAttributedString?
+            
+            init(detailTitle: String) {
+                self.detailTitle = detailTitle
+            }
+        }
+        
+        class CurrencyTextDetail: CurrencyDetail {
+            var detailValue: String?
+            var atributedValue: NSAttributedString?
+            
+            init(detailTitle: String, detailValue: String? = nil, atributedValue: NSAttributedString? = nil){
+                self.detailValue = detailValue
+                self.atributedValue = atributedValue
+                
+                super.init(detailTitle: detailTitle)
+            }
+            
+        }
+        
+        class CurrencyValueDetail: CurrencyDetail {
+            var fiatValue: Double
+            var cryptoValue: Double
+            
+            init(detailTitle: String, fiatValue: Double, cryptoValue: Double){
+                self.fiatValue = fiatValue
+                self.cryptoValue = cryptoValue
+                
+                super.init(detailTitle: detailTitle)
+            }
+            
+            public func getFiatValueAsString() -> String{
+                return String(format: Cryptocurrency.valueFloatingPointFiat, fiatValue)
+            }
+            
+            public func getCryptoValueAsString() -> String{
+                return String(format: Cryptocurrency.valueFloatingPointBitcoin, cryptoValue)
+            }
+            
+        }
+        
+        var title: String
+        var details: [CurrencyDetail]
+        
+        init(title: String, details: [CurrencyDetail]) {
+            self.title = title
+            self.details = details
+        }
+        
+    }
+    
     var name: String
     var symbolName: String
     var image: UIImage
@@ -45,6 +101,7 @@ class Cryptocurrency: NSObject {
     var change: Double
     var watchlisted: Bool
     var notifications: [CurrencyNotification]
+    var detailSections: [CurrencyDetailSection]
     
     init(name: String, symbolName: String, image: UIImage, valueFiat: Double, valueBitcoin: Double, valueChange: Double, watchlisted: Bool) {
         self.name = name
@@ -55,6 +112,7 @@ class Cryptocurrency: NSObject {
         self.change = valueChange
         self.watchlisted = watchlisted
         self.notifications = []
+        self.detailSections = []
     }
     
     public func update(_ currency: Cryptocurrency){

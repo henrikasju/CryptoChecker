@@ -338,3 +338,8 @@ class AddNotificationViewController: UIViewController {
     }
 
 }
+
+//MARK: - TextField Section
+extension AddNotificationViewController: UITextFieldDelegate{
+    
+}

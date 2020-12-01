@@ -11,6 +11,7 @@
 		361ED8A4257593EE0064E7F9 /* CurrencyGraphSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */; };
 		361ED8A72576789D0064E7F9 /* GraphTimelineSelectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A62576789C0064E7F9 /* GraphTimelineSelectionButton.swift */; };
 		361ED8AD25769B2D0064E7F9 /* CurrencyDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8AC25769B2C0064E7F9 /* CurrencyDetailCollectionViewCell.swift */; };
+		361ED8B12576A7E60064E7F9 /* CurrencyDetailHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8B02576A7E60064E7F9 /* CurrencyDetailHeaderCollectionReusableView.swift */; };
 		3644062F256FF4B200990D93 /* NotificationPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3644062E256FF4B200990D93 /* NotificationPresentationController.swift */; };
 		3644063225700EF600990D93 /* NotificationTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3644063125700EF600990D93 /* NotificationTransitioningDelegate.swift */; };
 		364406352570552500990D93 /* NotificationAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364406342570552500990D93 /* NotificationAnimatedTransitioning.swift */; };
@@ -48,6 +49,7 @@
 		361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyGraphSectionView.swift; sourceTree = "<group>"; };
 		361ED8A62576789C0064E7F9 /* GraphTimelineSelectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphTimelineSelectionButton.swift; sourceTree = "<group>"; };
 		361ED8AC25769B2C0064E7F9 /* CurrencyDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDetailCollectionViewCell.swift; sourceTree = "<group>"; };
+		361ED8B02576A7E60064E7F9 /* CurrencyDetailHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDetailHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		3644062E256FF4B200990D93 /* NotificationPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPresentationController.swift; sourceTree = "<group>"; };
 		3644063125700EF600990D93 /* NotificationTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTransitioningDelegate.swift; sourceTree = "<group>"; };
 		364406342570552500990D93 /* NotificationAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAnimatedTransitioning.swift; sourceTree = "<group>"; };
@@ -145,8 +147,8 @@
 		36A088BE2561876B00C8B3CA /* CollectionViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				361ED8AC25769B2C0064E7F9 /* CurrencyDetailCollectionViewCell.swift */,
 				36A088BF2561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift */,
+				361ED8AC25769B2C0064E7F9 /* CurrencyDetailCollectionViewCell.swift */,
 				36A088F42564898200C8B3CA /* PreferenceTextBasedCollectionViewCell.swift */,
 				36A088FF2564938200C8B3CA /* PreferenceSwitchBasedCollectionViewCell.swift */,
 				36A08909256585EF00C8B3CA /* PreferenceSelectionCollectionViewCell.swift */,
@@ -194,6 +196,7 @@
 			children = (
 				36A088CB2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift */,
 				36A088BE2561876B00C8B3CA /* CollectionViewCells */,
+				361ED8B02576A7E60064E7F9 /* CurrencyDetailHeaderCollectionReusableView.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36A088CC2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift in Sources */,
+				361ED8B12576A7E60064E7F9 /* CurrencyDetailHeaderCollectionReusableView.swift in Sources */,
 				361ED8AD25769B2D0064E7F9 /* CurrencyDetailCollectionViewCell.swift in Sources */,
 				36A0890725657D3800C8B3CA /* PreferenceSelectionViewController.swift in Sources */,
 				36A088E025634B2300C8B3CA /* CustomUITabBarItem.swift in Sources */,

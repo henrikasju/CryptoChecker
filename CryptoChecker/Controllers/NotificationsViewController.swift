@@ -8,7 +8,9 @@
 import UIKit
 
 class NotificationsViewController: UIViewController {
-
+    
+    var tableViewTopConstraint: NSLayoutConstraint?
+    
     let viewTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -23,37 +25,43 @@ class NotificationsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .none
+        
+        tableView.separatorStyle = .none
+        tableView.horizontalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -20)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.selectionFollowsFocus = false
+        
         return tableView
     }()
     
     var addNotificationTransitioningDelegate = NotificationTransitioningDelegate()
-    
-    private var currenciesWithNotifications: [Cryptocurrency] = []
+    var showAllCurrencies: Bool = true
+    var currenciesWithNotifications: [Cryptocurrency] = []
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        navigationController?.isNavigationBarHidden = true
-        currenciesWithNotifications = DataBaseManager.shareInstance.fetchCryptocurrenciesWithNotifications()
-        currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
-        currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
-        currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
-        currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
+        if showAllCurrencies {
+            navigationController?.isNavigationBarHidden = true
+            
+            currenciesWithNotifications = DataBaseManager.shareInstance.fetchCryptocurrenciesWithNotifications()
+            currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
+            currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
+            currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
+            currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
+        }else{
+            navigationController?.isNavigationBarHidden = false
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         view.backgroundColor = Constants.AppColors.appBackground
         
         notificationTableView.register(NotificationTableViewCell.self, forCellReuseIdentifier: NotificationTableViewCell.identifier)
         notificationTableView.register(NotificationTableViewBottomCell.self, forCellReuseIdentifier: NotificationTableViewBottomCell.identifier)
         notificationTableView.register(NotificationTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: NotificationTableViewHeaderView.identifier)
-        
-        notificationTableView.separatorStyle = .none
-        notificationTableView.horizontalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -20)
-        notificationTableView.showsVerticalScrollIndicator = false
         
         
         view.addSubview(viewTitle)
@@ -61,8 +69,6 @@ class NotificationsViewController: UIViewController {
         
         setupTitleLabel()
         setupTableView()
-        
-        notificationTableView.selectionFollowsFocus = false
     }
     
     private func setupTitleLabel(){
@@ -73,7 +79,16 @@ class NotificationsViewController: UIViewController {
     
     private func setupTableView(){
         let sidePadding: CGFloat = 16
-        notificationTableView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 49).isActive = true
+        
+        
+        
+        if showAllCurrencies {
+            tableViewTopConstraint = notificationTableView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 49)
+        }else{
+            tableViewTopConstraint = notificationTableView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 8)
+        }
+        
+        tableViewTopConstraint?.isActive = true
         notificationTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: sidePadding).isActive = true
         notificationTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -sidePadding).isActive = true
         notificationTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
@@ -102,6 +117,9 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if currenciesWithNotifications[section].notifications.count == 0 {
+            return 50
+        }
         return 40
     }
     
@@ -133,11 +151,12 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
             returnView.delegate = self
         }
         
-//        let lol = NotificationTableViewHeaderView()
-//        lol.updateFieldWithData(data: currenciesWithNotifications[section])
-        
-//        let lol = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 80))
-//        lol.backgroundColor = .red
+        if currenciesWithNotifications[section].notifications.count == 0 {
+            returnView.contentView.layer.cornerRadius = Constants.NotificationController.Cell.Size.cornerRadius
+            returnView.contentView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+        }else{
+            
+        }
         
         return returnView
     }
@@ -171,10 +190,8 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
             cell?.delegate = self
         }
         
-        
         return cell!
     }
-    
     
 }
 
@@ -193,7 +210,7 @@ extension NotificationsViewController: NotificationTableViewHeaderViewDelegate{
         
 //        var idk = tableViewHeaderView
         
-        var vc = AddNotificationViewController()
+        let vc = AddNotificationViewController()
 //        vc.setNavi = self.navigationController
         addNotificationTransitioningDelegate.transitionDirection = .fromBottom
         vc.transitioningDelegate = addNotificationTransitioningDelegate

@@ -91,13 +91,12 @@ class CurrencyGraphSectionView: UIView {
         configureContents()
     }
     
-    public func setupViewWithData(currentPrice: String){
+    public func updateViewWithData(currentPrice: String){
         currentPriceLabel.text = currentPrice
     }
     
     func setupTimelineHStackView() {
         for button in timelineSelectionButtons {
-            button.addTarget(self, action: #selector(timelineButtonPressed(sender:)), for: .touchUpInside)
             timelineSelectinoHStackView.addArrangedSubview(button)
         }
     }
@@ -130,13 +129,6 @@ class CurrencyGraphSectionView: UIView {
         ])
     }
     
-    @objc func timelineButtonPressed(sender: GraphTimelineSelectionButton)
-    {
-        sender.setButtonSelectionStatus(isSelected: true)
-        
-        selectedButton.setButtonSelectionStatus(isSelected: false)
-        selectedButton = sender
-    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
