@@ -10,7 +10,6 @@
 		361ED8A125758AA10064E7F9 /* CurrencyDisplaySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A025758AA10064E7F9 /* CurrencyDisplaySelectionView.swift */; };
 		361ED8A4257593EE0064E7F9 /* CurrencyGraphSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */; };
 		361ED8A72576789D0064E7F9 /* GraphTimelineSelectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A62576789C0064E7F9 /* GraphTimelineSelectionButton.swift */; };
-		361ED8AA25768EA70064E7F9 /* CurrencyDetailCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A925768EA70064E7F9 /* CurrencyDetailCollectionView.swift */; };
 		361ED8AD25769B2D0064E7F9 /* CurrencyDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8AC25769B2C0064E7F9 /* CurrencyDetailCollectionViewCell.swift */; };
 		3644062F256FF4B200990D93 /* NotificationPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3644062E256FF4B200990D93 /* NotificationPresentationController.swift */; };
 		3644063225700EF600990D93 /* NotificationTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3644063125700EF600990D93 /* NotificationTransitioningDelegate.swift */; };
@@ -48,7 +47,6 @@
 		361ED8A025758AA10064E7F9 /* CurrencyDisplaySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDisplaySelectionView.swift; sourceTree = "<group>"; };
 		361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyGraphSectionView.swift; sourceTree = "<group>"; };
 		361ED8A62576789C0064E7F9 /* GraphTimelineSelectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphTimelineSelectionButton.swift; sourceTree = "<group>"; };
-		361ED8A925768EA70064E7F9 /* CurrencyDetailCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDetailCollectionView.swift; sourceTree = "<group>"; };
 		361ED8AC25769B2C0064E7F9 /* CurrencyDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		3644062E256FF4B200990D93 /* NotificationPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPresentationController.swift; sourceTree = "<group>"; };
 		3644063125700EF600990D93 /* NotificationTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTransitioningDelegate.swift; sourceTree = "<group>"; };
@@ -124,7 +122,6 @@
 				36A088DF25634B2300C8B3CA /* CustomUITabBarItem.swift */,
 				361ED8A025758AA10064E7F9 /* CurrencyDisplaySelectionView.swift */,
 				361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */,
-				361ED8A925768EA70064E7F9 /* CurrencyDetailCollectionView.swift */,
 				361ED8A62576789C0064E7F9 /* GraphTimelineSelectionButton.swift */,
 			);
 			path = Views;
@@ -314,7 +311,6 @@
 				36A089032564946000C8B3CA /* PreferenceSwitchBased.swift in Sources */,
 				36A0890A256585EF00C8B3CA /* PreferenceSelectionCollectionViewCell.swift in Sources */,
 				36A089162565DF0B00C8B3CA /* NotificationTableViewHeaderView.swift in Sources */,
-				361ED8AA25768EA70064E7F9 /* CurrencyDetailCollectionView.swift in Sources */,
 				36A088ED2564502C00C8B3CA /* DataBaseManager.swift in Sources */,
 				36A088E925644E0700C8B3CA /* Cryptocurrency.swift in Sources */,
 				3644062F256FF4B200990D93 /* NotificationPresentationController.swift in Sources */,
