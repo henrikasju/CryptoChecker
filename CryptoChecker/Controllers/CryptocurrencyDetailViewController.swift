@@ -60,6 +60,16 @@ class CryptocurrencyDetailViewController: UIViewController {
         return view
     }()
     
+    let currencyDetailsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = Constants.AppColors.ViewBackground.cell
+        collectionView.layer.cornerRadius = Constants.CurrencyCollection.Cell.ViewSizes.cellCornerRadius
+        
+        return collectionView
+    }()
+    
     let openNotificationsButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -70,7 +80,7 @@ class CryptocurrencyDetailViewController: UIViewController {
         
         return button
     }()
-    
+        
     var data: Cryptocurrency?
     private var representDataToFiat: Bool = true
     
@@ -118,12 +128,16 @@ class CryptocurrencyDetailViewController: UIViewController {
         tabBarCustomButtom.addTarget(self, action: #selector(watchlistButtonPressed(sender:)), for: .touchUpInside)
         navigationItem.rightBarButtonItem = tabBarRightItem
         
+        currencyDetailsCollectionView.delegate = self
+        currencyDetailsCollectionView.dataSource = self
+        
         openNotificationsButton.addTarget(self, action: #selector(openNotificatonsButtonPressed(sender:)), for: .touchUpInside)
         
         view.addSubview(currencyTitleLabel)
         view.addSubview(currencyImageView)
         view.addSubview(currencyDisplaySelectionView)
         view.addSubview(currencyGraphSectionView)
+        view.addSubview(currencyDetailsCollectionView)
         view.addSubview(openNotificationsButton)
         
         NSLayoutConstraint.activate([
@@ -141,7 +155,12 @@ class CryptocurrencyDetailViewController: UIViewController {
             currencyGraphSectionView.topAnchor.constraint(equalTo: currencyDisplaySelectionView.bottomAnchor, constant: 12),
             currencyGraphSectionView.leadingAnchor.constraint(equalTo: currencyDisplaySelectionView.leadingAnchor),
             currencyGraphSectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            currencyGraphSectionView.heightAnchor.constraint(equalToConstant: 300),
+            currencyGraphSectionView.heightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.heightAnchor, multiplier: 1/2.6),
+            
+            currencyDetailsCollectionView.topAnchor.constraint(equalTo: currencyGraphSectionView.bottomAnchor, constant: 12),
+            currencyDetailsCollectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            currencyDetailsCollectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            currencyDetailsCollectionView.bottomAnchor.constraint(equalTo: openNotificationsButton.topAnchor, constant: -12),
             
             openNotificationsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             openNotificationsButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -167,6 +186,16 @@ class CryptocurrencyDetailViewController: UIViewController {
     @objc func openNotificatonsButtonPressed(sender: UIButton){
         print("Open notification Button pressed!")
     }
-    
 
+}
+
+//MARK: - DetailsCollectionView Section
+extension CryptocurrencyDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        <#code#>
+    }
 }
