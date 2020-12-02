@@ -24,6 +24,7 @@ class CurrencyDetailHeaderCollectionReusableView: UICollectionReusableView {
         super.init(frame: frame)
         
         self.backgroundColor = .none
+        self.layer.cornerRadius = Constants.NotificationController.Cell.Size.cornerRadius
         
         configureContents()
     }

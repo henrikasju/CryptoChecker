@@ -68,7 +68,7 @@ class NotificationPresentationController: UIPresentationController {
         guard let coordinator = presentedViewController.transitionCoordinator else {
             fatalError("Could not get child view controllers transition coordinator!")
         }
-        
+                
         coordinator.animate(alongsideTransition: { (_) in
             self.dimmingView.alpha = self.minDimmingAlpha
         }, completion: nil)

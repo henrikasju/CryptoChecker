@@ -72,6 +72,7 @@ class NotificationTableViewCell: UITableViewCell {
 //        contentView.layer.borderColor = UIColor.black.cgColor
         backgroundColor = .none
         backgroundView = UIView()
+        selectionStyle = .none
 
         configureContents()
     }

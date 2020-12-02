@@ -56,6 +56,10 @@ class NotificationAnimatedTransitioning: NSObject, UIViewControllerAnimatedTrans
         
         controller.view.frame = initialFrame
         
+        if !presentViewController {
+            controller.viewWillDisappear(true)
+        }
+        
         UIView.animate(withDuration: animationDuration) {
             controller.view.frame = finalFrame
         } completion: { (finished) in

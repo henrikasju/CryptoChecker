@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol AddNotificationViewControllerDelegate {
+    func AddNotificationPopUpViewWillDisapear(_ viewController: AddNotificationViewController, animated: Bool)
+}
+
 class AddNotificationViewController: UIViewController {
     
     // TODO: Should be views should be seperated into seperate view files!
@@ -123,7 +127,7 @@ class AddNotificationViewController: UIViewController {
     let selectedPriceTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.text = "00.00 USD"
+        textField.text = "00.00$"
         textField.font = Constants.NotificationController.Cell.Font.notificationTextField
         textField.textAlignment = .center
         
@@ -157,8 +161,15 @@ class AddNotificationViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        delegate?.AddNotificationPopUpViewWillDisapear(self, animated: animated)
+    }
+    
     public var data: Cryptocurrency?
     private var representDataToFiat: Bool = true
+    public var delegate: AddNotificationViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -178,11 +189,15 @@ class AddNotificationViewController: UIViewController {
     }
     
     public func setupViewData(viewData: Cryptocurrency){
-        let currentPrice = String((representDataToFiat ? viewData.valueFiat : viewData.valueBitcoin))
-        let currentCurrencySymbol = String((representDataToFiat ? "$" : "₿"))
-        
         navigationBarTitleLabel.text = viewData.name
         navigationBarTitleImage.image = viewData.image
+        
+        updateViewData(viewData: viewData)
+    }
+    
+    private func updateViewData(viewData: Cryptocurrency){
+        let currentPrice = (representDataToFiat ? viewData.getFiatValueAsString() : viewData.getBitcoinValueAsString())
+        let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
         
         let currentPriceSecondaryText: NSAttributedString = {
             let textAtributes = [NSAttributedString.Key.foregroundColor: Constants.NotificationController.Cell.Color.secondaryCurrentPrice]
@@ -197,6 +212,14 @@ class AddNotificationViewController: UIViewController {
         currentPriceLabelAttributedString.append(NSMutableAttributedString(string: (" " + currentPrice + " " + currentCurrencySymbol) ))
         
         currentPriceLabel.attributedText = currentPriceLabelAttributedString
+        
+        updateNotificationExplanationLabel(currentValue: currentPrice, symbolName: viewData.symbolName)
+    }
+    
+    private func updateNotificationExplanationLabel(currentValue: String, symbolName: String){
+        let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
+        let text = "Add notification when\n" + symbolName + " price is " + currentValue + currentCurrencySymbol
+        creatingNotificationExplanationLabel.text = text
     }
     
     private func configureMainViewContents(){
@@ -246,6 +269,8 @@ class AddNotificationViewController: UIViewController {
         notificationCreationView.addSubview(selectedPriceHelperLabel)
         notificationCreationView.addSubview(creatingNotificationExplanationLabel)
         
+        selectedPriceTextField.delegate = self
+        
         guard var textFieldYoffset = selectedPriceTextField.font?.pointSize else {
             fatalError("Could not access TextField point size in AddNotificationViewController")
         }
@@ -281,9 +306,30 @@ class AddNotificationViewController: UIViewController {
     
     @objc func addNotificationButtonPressed(sender: UIButton){
         
-        if let transitioningDelegate = self.transitioningDelegate as? NotificationTransitioningDelegate{
-            transitioningDelegate.transitionDirection = .fromTop
-            dismiss(animated: true, completion: nil)
+        let notificationCurrencyType = (representDataToFiat ? "USD" : "BTC")
+        let selectedCurrentPrice = (representDataToFiat ? data?.valueFiat : data?.valueBitcoin)
+
+        if let notificationSetValueText = selectedPriceTextField.text, let currentPrice = selectedCurrentPrice {
+            // Modify textfield String Text
+            
+            if let setValue = Double(notificationSetValueText) {
+                
+                let isAboveCurrent = setValue > currentPrice
+                let creationDate = "XXXX-XX-XX"
+                
+                let notification = Cryptocurrency.CurrencyNotification(setValue: setValue, aboveValue: isAboveCurrent, creationDate: creationDate, currencyType: notificationCurrencyType, isOn: true)
+                
+                data?.notifications.append(notification)
+                
+                if let transitioningDelegate = self.transitioningDelegate as? NotificationTransitioningDelegate{
+                    
+                    transitioningDelegate.transitionDirection = .fromTop
+                    dismiss(animated: true) {
+                        self.viewDidDisappear(true)
+                    }
+                    
+                }
+            }
         }
     }
     
@@ -331,8 +377,10 @@ class AddNotificationViewController: UIViewController {
         }
         
         if(sender == fiatButton || sender == bitcoinButton){
-            // UPDATE
-//            watchlistCollectionView.reloadData()
+            guard let availableData = data else {
+                fatalError("Error: Accesing currency data in AddNotificationViewController")
+            }
+            updateViewData(viewData: availableData)
         }
         
     }
@@ -342,4 +390,33 @@ class AddNotificationViewController: UIViewController {
 //MARK: - TextField Section
 extension AddNotificationViewController: UITextFieldDelegate{
     
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        
+        if textField == selectedPriceTextField {
+            let textLastCharacter = textField.text?.last
+            let lastCharacterIsNumber = textLastCharacter?.isNumber
+            if !(lastCharacterIsNumber ?? false) {
+                textField.text = ""
+            }
+        }
+        
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if var currentText = textField.text, textField == selectedPriceTextField {
+            let insertIndex = currentText.index(currentText.startIndex, offsetBy: range.location)
+            currentText.insert(contentsOf: string, at: insertIndex)
+            
+            if let stringAsDouble = Double(currentText){
+                print(stringAsDouble)
+                return true
+            }else{
+                return false
+            }
+        }
+        
+        return true
+    }
 }

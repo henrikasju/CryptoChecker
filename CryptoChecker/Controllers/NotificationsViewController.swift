@@ -52,6 +52,9 @@ class NotificationsViewController: UIViewController {
         }else{
             navigationController?.isNavigationBarHidden = false
         }
+        
+        // TODO: Optimize!
+        notificationTableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -93,17 +96,6 @@ class NotificationsViewController: UIViewController {
         notificationTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -sidePadding).isActive = true
         notificationTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
@@ -152,11 +144,13 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         }
         
         if currenciesWithNotifications[section].notifications.count == 0 {
-            returnView.contentView.layer.cornerRadius = Constants.NotificationController.Cell.Size.cornerRadius
+//            returnView.contentView.layer.cornerRadius = Constants.NotificationController.Cell.Size.cornerRadius
             returnView.contentView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
-        }else{
+        }else if returnView.contentView.layer.maskedCorners.contains(.layerMinXMaxYCorner) && returnView.contentView.layer.maskedCorners.contains(.layerMaxXMaxYCorner) {
             
+            returnView.contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         }
+        
         
         return returnView
     }
@@ -206,17 +200,23 @@ extension NotificationsViewController: NotificationTableViewCellDelegate{
 extension NotificationsViewController: NotificationTableViewHeaderViewDelegate{
     
     func notificationAddButtonPressed(tableViewHeaderView: NotificationTableViewHeaderView, button: UIButton) {
-        print("Add pressed - controller")
-        
-//        var idk = tableViewHeaderView
-        
+                
         let vc = AddNotificationViewController()
-//        vc.setNavi = self.navigationController
         addNotificationTransitioningDelegate.transitionDirection = .fromBottom
         vc.transitioningDelegate = addNotificationTransitioningDelegate
         vc.modalPresentationStyle = .custom
+        
+        vc.delegate = self
         vc.data = currenciesWithNotifications[tableViewHeaderView.id]
+        
         navigationController?.present(vc, animated: true, completion: nil)
     }
     
+}
+
+extension NotificationsViewController: AddNotificationViewControllerDelegate{
+    
+    func AddNotificationPopUpViewWillDisapear(_ viewController: AddNotificationViewController, animated: Bool) {
+        self.viewWillAppear(animated)
+    }
 }
