@@ -12,7 +12,7 @@ protocol AddNotificationViewControllerDelegate {
 }
 
 class AddNotificationViewController: UIViewController {
-    
+        
     // TODO: Should be views should be seperated into seperate view files!
     
     let navigationBarTitleLabel: UILabel = {
@@ -127,9 +127,10 @@ class AddNotificationViewController: UIViewController {
     let selectedPriceTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.text = "00.00$"
+        textField.text = "00.00"
         textField.font = Constants.NotificationController.Cell.Font.notificationTextField
         textField.textAlignment = .center
+        textField.keyboardType = .decimalPad
         
         return textField
     }()
@@ -176,7 +177,6 @@ class AddNotificationViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         view.backgroundColor = Constants.AppColors.appBackground
-
         
         configureMainViewContents()
         configureNotificationCreationViewContents()
@@ -213,7 +213,9 @@ class AddNotificationViewController: UIViewController {
         
         currentPriceLabel.attributedText = currentPriceLabelAttributedString
         
-        updateNotificationExplanationLabel(currentValue: currentPrice, symbolName: viewData.symbolName)
+        let selectedValueText = selectedPriceTextField.text ?? "00.00"
+        
+        updateNotificationExplanationLabel(currentValue: selectedValueText, symbolName: viewData.symbolName)
     }
     
     private func updateNotificationExplanationLabel(currentValue: String, symbolName: String){
@@ -256,7 +258,7 @@ class AddNotificationViewController: UIViewController {
             notificationCreationView.trailingAnchor.constraint(equalTo: addNotificationButton.trailingAnchor, constant: 0),
             notificationCreationView.bottomAnchor.constraint(equalTo: addNotificationButton.topAnchor, constant: -16),
             
-            addNotificationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+            addNotificationButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             addNotificationButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             addNotificationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
 
@@ -299,23 +301,29 @@ class AddNotificationViewController: UIViewController {
     @objc func cancelButtonPressed(sender: UIButton){
 
         if let transitioningDelegate = self.transitioningDelegate as? NotificationTransitioningDelegate{
-            transitioningDelegate.transitionDirection = .toLeft
+//            self.view.endEditing(true)
+            transitioningDelegate.transitionDirection = .toBottom
             dismiss(animated: true, completion: nil)
         }
     }
     
     @objc func addNotificationButtonPressed(sender: UIButton){
-        
+                
         let notificationCurrencyType = (representDataToFiat ? "USD" : "BTC")
         let selectedCurrentPrice = (representDataToFiat ? data?.valueFiat : data?.valueBitcoin)
 
         if let notificationSetValueText = selectedPriceTextField.text, let currentPrice = selectedCurrentPrice {
             // Modify textfield String Text
             
-            if let setValue = Double(notificationSetValueText) {
+            if let setValue = getDoubleFromStringWithLocale(valueText: notificationSetValueText), setValue > 0 {
                 
                 let isAboveCurrent = setValue > currentPrice
-                let creationDate = "XXXX-XX-XX"
+                
+                let date = Date()
+                let dateFormat = DateFormatter()
+                dateFormat.dateFormat = "yyyy-MM-dd"
+                
+                let creationDate = dateFormat.string(from: date)
                 
                 let notification = Cryptocurrency.CurrencyNotification(setValue: setValue, aboveValue: isAboveCurrent, creationDate: creationDate, currencyType: notificationCurrencyType, isOn: true)
                 
@@ -323,7 +331,7 @@ class AddNotificationViewController: UIViewController {
                 
                 if let transitioningDelegate = self.transitioningDelegate as? NotificationTransitioningDelegate{
                     
-                    transitioningDelegate.transitionDirection = .fromTop
+                    transitioningDelegate.transitionDirection = .toBottom
                     dismiss(animated: true) {
                         self.viewDidDisappear(true)
                     }
@@ -381,6 +389,7 @@ class AddNotificationViewController: UIViewController {
                 fatalError("Error: Accesing currency data in AddNotificationViewController")
             }
             updateViewData(viewData: availableData)
+            textFieldDidChangeSelection(selectedPriceTextField)
         }
         
     }
@@ -390,12 +399,16 @@ class AddNotificationViewController: UIViewController {
 //MARK: - TextField Section
 extension AddNotificationViewController: UITextFieldDelegate{
     
+    func getDoubleFromStringWithLocale(valueText: String) -> Double?{
+        let formatter = NumberFormatter()
+        formatter.decimalSeparator = Locale.current.decimalSeparator
+        return formatter.number(from: valueText)?.doubleValue
+    }
+    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         
-        if textField == selectedPriceTextField {
-            let textLastCharacter = textField.text?.last
-            let lastCharacterIsNumber = textLastCharacter?.isNumber
-            if !(lastCharacterIsNumber ?? false) {
+        if textField == selectedPriceTextField, let currentText = textField.text {
+            if currentText == "00.00"{
                 textField.text = ""
             }
         }
@@ -406,11 +419,11 @@ extension AddNotificationViewController: UITextFieldDelegate{
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         if var currentText = textField.text, textField == selectedPriceTextField {
+            
             let insertIndex = currentText.index(currentText.startIndex, offsetBy: range.location)
             currentText.insert(contentsOf: string, at: insertIndex)
             
-            if let stringAsDouble = Double(currentText){
-                print(stringAsDouble)
+            if let stringAsDouble = getDoubleFromStringWithLocale(valueText: currentText){
                 return true
             }else{
                 return false
@@ -418,5 +431,28 @@ extension AddNotificationViewController: UITextFieldDelegate{
         }
         
         return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        
+        if var currentText = textField.text, let availableData = data, textField == selectedPriceTextField {
+                        
+            if let decimalSeperator = Locale.current.decimalSeparator,
+               let floatingPointIndex = currentText.firstIndex(of: Character(decimalSeperator)),
+               representDataToFiat {
+
+                let currentStringAfterSeperator = currentText.suffix(from: floatingPointIndex).dropFirst()
+                let allowedPrecision = 2
+                
+                if currentStringAfterSeperator.count > allowedPrecision {
+                    let allowedPrecisionEndIndex = currentText.index(floatingPointIndex, offsetBy: allowedPrecision+1)
+                    let acceptedString = String(currentText[..<allowedPrecisionEndIndex])
+                    textField.text = acceptedString
+                    currentText = acceptedString
+                }
+            }
+
+            updateNotificationExplanationLabel(currentValue: currentText, symbolName: availableData.symbolName)
+        }
     }
 }

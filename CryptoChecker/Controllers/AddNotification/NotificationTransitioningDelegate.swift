@@ -8,10 +8,11 @@
 import UIKit
 
 enum PresentationDirection {
-  case toLeft
-  case fromTop
-  case toRight
-  case fromBottom
+    case toLeft
+    case fromTop
+    case toRight
+    case fromBottom
+    case toBottom
 }
 
 class NotificationTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {

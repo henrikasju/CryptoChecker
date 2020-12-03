@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NotificationTableViewCellDelegate {
-    func notificationStatusChanged(_ tableViewCell: NotificationTableViewCell, switch: UISwitch)
+    func notificationStatusChanged(_ tableViewCell: NotificationTableViewCell, uiSwitch: UISwitch)
 }
 
 class NotificationTableViewCell: UITableViewCell {
@@ -148,7 +148,7 @@ class NotificationTableViewCell: UITableViewCell {
     }
     
     @objc private func toggleSwitchChangedValue(sender: UISwitch){
-        delegate?.notificationStatusChanged(self, switch: statusSwitch)
+        delegate?.notificationStatusChanged(self, uiSwitch: statusSwitch)
     }
     
     required init?(coder: NSCoder) {

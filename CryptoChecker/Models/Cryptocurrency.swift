@@ -32,8 +32,13 @@ class Cryptocurrency: NSObject {
         }
         
         public func getSetValueAsString() -> String{
-            let floatingPoint = ( currencyType == "USD" ? Cryptocurrency.valueFloatingPointFiat : Cryptocurrency.valueChangeFloatingPoint )
-            return String(format: floatingPoint, setValue)
+            let floatingPoint = ( currencyType == "USD" ? Cryptocurrency.valueFloatingPointFiat : Cryptocurrency.valueFloatingPointBitcoin )
+            var returningString = String(format: floatingPoint, setValue)
+            if currencyType != "USD" && returningString.last == "0" {
+                returningString.removeLast()
+                returningString.append("1")
+            }
+            return returningString
         }
     }
     

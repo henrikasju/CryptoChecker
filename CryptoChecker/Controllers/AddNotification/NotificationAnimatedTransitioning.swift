@@ -11,6 +11,7 @@ class NotificationAnimatedTransitioning: NSObject, UIViewControllerAnimatedTrans
 
     let direction: PresentationDirection
     let presentViewController: Bool
+    var transitionDuration = 0.4
     
     init(direction: PresentationDirection, presentViewController: Bool) {
         self.direction = direction
@@ -19,7 +20,7 @@ class NotificationAnimatedTransitioning: NSObject, UIViewControllerAnimatedTrans
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3
+        return transitionDuration
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -47,6 +48,8 @@ class NotificationAnimatedTransitioning: NSObject, UIViewControllerAnimatedTrans
             dismissedFrame.origin.x = -presentedFrame.width
         case .toRight:
             dismissedFrame.origin.x = presentedFrame.width
+        case .toBottom:
+            dismissedFrame.origin.y = presentedFrame.maxY
         }
         
         let initialFrame = presentViewController ? dismissedFrame : presentedFrame

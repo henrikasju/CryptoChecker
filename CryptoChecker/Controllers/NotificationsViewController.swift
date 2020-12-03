@@ -191,8 +191,12 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
 
 //MARK: - Table view cell Section
 extension NotificationsViewController: NotificationTableViewCellDelegate{
-    func notificationStatusChanged(_ tableViewCell: NotificationTableViewCell, switch: UISwitch) {
-        print("Notification changed - controller")
+    func notificationStatusChanged(_ tableViewCell: NotificationTableViewCell, uiSwitch: UISwitch) {
+        
+        // TODO: Prob check before accessing array element
+        if let tableCellIndex = notificationTableView.indexPath(for: tableViewCell){
+            currenciesWithNotifications[tableCellIndex.section].notifications[tableCellIndex.row].isOn = uiSwitch.isOn
+        }
     }
 }
 

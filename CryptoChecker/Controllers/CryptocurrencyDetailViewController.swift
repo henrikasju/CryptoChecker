@@ -66,6 +66,7 @@ class CryptocurrencyDetailViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = Constants.AppColors.ViewBackground.cell
         collectionView.layer.cornerRadius = Constants.CurrencyCollection.Cell.ViewSizes.cellCornerRadius
+        collectionView.showsVerticalScrollIndicator = false
         
         return collectionView
     }()
@@ -79,6 +80,13 @@ class CryptocurrencyDetailViewController: UIViewController {
         button.layer.cornerRadius = Constants.CurrencyCollection.Cell.ViewSizes.cellCornerRadius
         
         return button
+    }()
+    
+    let mainSectionScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return scrollView
     }()
         
     var data: Cryptocurrency?
@@ -105,6 +113,9 @@ class CryptocurrencyDetailViewController: UIViewController {
         guard let availableData = data else {
             fatalError("Error in accessing data at CryptocurrencyDetailViewController!")
         }
+        
+        // TODO: Remove this later!
+//        availableData.detailSections.append(contentsOf: availableData.detailSections)
         
         guard let firstTimelineButton = currencyGraphSectionView.timelineSelectionButtons.first else {
             fatalError("Error accessing button in currencyGraphSectionView.timelineSelectionButtons!")
@@ -159,9 +170,12 @@ class CryptocurrencyDetailViewController: UIViewController {
         view.addSubview(currencyTitleLabel)
         view.addSubview(currencyImageView)
         view.addSubview(currencyDisplaySelectionView)
+        
         view.addSubview(currencyGraphSectionView)
         view.addSubview(currencyDetailsCollectionView)
+        
         view.addSubview(openNotificationsButton)
+
         
         NSLayoutConstraint.activate([
             
@@ -174,12 +188,24 @@ class CryptocurrencyDetailViewController: UIViewController {
             currencyDisplaySelectionView.leadingAnchor.constraint(equalTo: currencyTitleLabel.leadingAnchor, constant: 0),
             currencyDisplaySelectionView.topAnchor.constraint(equalTo: currencyTitleLabel.bottomAnchor, constant: 8),
             currencyDisplaySelectionView.heightAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionHeight),
+
+            
+//            currencyGraphSectionView.topAnchor.constraint(equalTo: mainSectionScrollView.topAnchor, constant: 0),
+//            currencyGraphSectionView.leadingAnchor.constraint(equalTo: mainSectionScrollView.leadingAnchor, constant: 0),
+//            currencyGraphSectionView.trailingAnchor.constraint(equalTo: mainSectionScrollView.trailingAnchor, constant: 0),
+//            currencyGraphSectionView.heightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.heightAnchor, multiplier: 1/2.6),
+            
+//            currencyDetailsCollectionView.topAnchor.constraint(equalTo: currencyGraphSectionView.bottomAnchor, constant: 12),
+//            currencyDetailsCollectionView.leadingAnchor.constraint(equalTo: mainSectionScrollView.leadingAnchor, constant: 0),
+//            currencyDetailsCollectionView.trailingAnchor.constraint(equalTo: mainSectionScrollView.trailingAnchor, constant: 0),
+//            currencyDetailsCollectionView.bottomAnchor.constraint(equalTo: mainSectionScrollView.bottomAnchor, constant: 0),
+//            currencyDetailsCollectionView.heightAnchor.constraint(equalToConstant: 900),
             
             currencyGraphSectionView.topAnchor.constraint(equalTo: currencyDisplaySelectionView.bottomAnchor, constant: 12),
             currencyGraphSectionView.leadingAnchor.constraint(equalTo: currencyDisplaySelectionView.leadingAnchor),
-            currencyGraphSectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            currencyGraphSectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             currencyGraphSectionView.heightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.heightAnchor, multiplier: 1/2.6),
-            
+
             currencyDetailsCollectionView.topAnchor.constraint(equalTo: currencyGraphSectionView.bottomAnchor, constant: 12),
             currencyDetailsCollectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             currencyDetailsCollectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16),

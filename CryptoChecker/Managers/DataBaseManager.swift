@@ -45,7 +45,7 @@ final class DataBaseManager{
     ]
     
     private init() {
-        print("DataBase created!")
+        print("Fake DataBase created!")
         
         // Adding fake notifications!
         data[1].notifications = [
