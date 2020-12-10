@@ -16,6 +16,8 @@
 		3644063225700EF600990D93 /* NotificationTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3644063125700EF600990D93 /* NotificationTransitioningDelegate.swift */; };
 		364406352570552500990D93 /* NotificationAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364406342570552500990D93 /* NotificationAnimatedTransitioning.swift */; };
 		36440638257135F700990D93 /* CryptocurrencyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36440637257135F700990D93 /* CryptocurrencyDetailViewController.swift */; };
+		3679A9552582685E00C91093 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3679A9542582685E00C91093 /* PreferencesManager.swift */; };
+		3679A95825826AB100C91093 /* CryptocurrencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3679A95725826AB100C91093 /* CryptocurrencyManager.swift */; };
 		368E0C782566B182009DF52F /* NotificationTableViewBottomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368E0C772566B181009DF52F /* NotificationTableViewBottomCell.swift */; };
 		36A088C02561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088BF2561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift */; };
 		36A088CC2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088CB2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift */; };
@@ -55,6 +57,8 @@
 		3644063125700EF600990D93 /* NotificationTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTransitioningDelegate.swift; sourceTree = "<group>"; };
 		364406342570552500990D93 /* NotificationAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		36440637257135F700990D93 /* CryptocurrencyDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptocurrencyDetailViewController.swift; sourceTree = "<group>"; };
+		3679A9542582685E00C91093 /* PreferencesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
+		3679A95725826AB100C91093 /* CryptocurrencyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptocurrencyManager.swift; sourceTree = "<group>"; };
 		368E0C772566B181009DF52F /* NotificationTableViewBottomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewBottomCell.swift; sourceTree = "<group>"; };
 		36A088BF2561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptocurrencyCollectionViewCell.swift; sourceTree = "<group>"; };
 		36A088CB2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptocurrenciesUICollectionView.swift; sourceTree = "<group>"; };
@@ -172,6 +176,8 @@
 			children = (
 				36A088EC2564502C00C8B3CA /* DataBaseManager.swift */,
 				36EABE0425825FF700A83027 /* UserDefaultsManager.swift */,
+				3679A9542582685E00C91093 /* PreferencesManager.swift */,
+				3679A95725826AB100C91093 /* CryptocurrencyManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -307,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36A088CC2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift in Sources */,
+				3679A95825826AB100C91093 /* CryptocurrencyManager.swift in Sources */,
 				361ED8B12576A7E60064E7F9 /* CurrencyDetailHeaderCollectionReusableView.swift in Sources */,
 				361ED8AD25769B2D0064E7F9 /* CurrencyDetailCollectionViewCell.swift in Sources */,
 				36A0890725657D3800C8B3CA /* PreferenceSelectionViewController.swift in Sources */,
@@ -316,6 +323,7 @@
 				36A089122565A85B00C8B3CA /* NotificationTableViewCell.swift in Sources */,
 				36B49D3D25683E8B00AC6BC6 /* AddNotificationViewController.swift in Sources */,
 				36A088DA256334DC00C8B3CA /* NavigationUITabBarViewController.swift in Sources */,
+				3679A9552582685E00C91093 /* PreferencesManager.swift in Sources */,
 				36A089032564946000C8B3CA /* PreferenceSwitchBased.swift in Sources */,
 				36A0890A256585EF00C8B3CA /* PreferenceSelectionCollectionViewCell.swift in Sources */,
 				36A089162565DF0B00C8B3CA /* NotificationTableViewHeaderView.swift in Sources */,

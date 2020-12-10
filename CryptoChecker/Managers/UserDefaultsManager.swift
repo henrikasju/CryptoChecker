@@ -47,27 +47,27 @@ final class UserDefaultsManager {
     }
     
     // Setting alreadyLaunchedStatus to provided value
-    public static func setAlreadyLaunchedStatus(haveLaunched: Bool){
+    public static func setAlreadyLaunchedStatus(haveLaunched: Bool) {
         defaults.set(haveLaunched, forKey: Constants.UserDefaults.alreadyLaunched.key)
     }
     
     // Setting globalNotificationStatus to provided value
-    public static func setUserGlobalNotificationStatus(isOn: Bool){
+    public static func setUserGlobalNotificationStatus(isOn: Bool) {
         defaults.set(isOn, forKey: Constants.UserDefaults.globalNotificationStatus.key)
     }
     
     // Setting dataFormat to provided value
-    public static func setDataFormat(dataFormat: String){
+    public static func setDataFormat(dataFormat: String) {
         defaults.set(dataFormat, forKey: Constants.UserDefaults.dataFormat.key)
     }
     
     // Setting timeFormat to provided value
-    public static func setTimeFormat(timeFormat: String){
+    public static func setTimeFormat(timeFormat: String) {
         defaults.set(timeFormat, forKey: Constants.UserDefaults.timeFormat.key)
     }
     
     // Setting fiatCurrency to provided value
-    public static func setFiatCurrency(fiatCurrency: String){
+    public static func setFiatCurrency(fiatCurrency: String) {
         defaults.set(fiatCurrency, forKey: Constants.UserDefaults.fiatCurrency.key)
     }
     
