@@ -27,7 +27,7 @@
 		36A088DD25633BD600C8B3CA /* WatchlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088DC25633BD600C8B3CA /* WatchlistViewController.swift */; };
 		36A088E025634B2300C8B3CA /* CustomUITabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088DF25634B2300C8B3CA /* CustomUITabBarItem.swift */; };
 		36A088E325643A9C00C8B3CA /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088E225643A9C00C8B3CA /* NotificationsViewController.swift */; };
-		36A088E625644C6000C8B3CA /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088E525644C6000C8B3CA /* ProfileViewController.swift */; };
+		36A088E625644C6000C8B3CA /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088E525644C6000C8B3CA /* PreferencesViewController.swift */; };
 		36A088E925644E0700C8B3CA /* Cryptocurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088E825644E0600C8B3CA /* Cryptocurrency.swift */; };
 		36A088ED2564502C00C8B3CA /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088EC2564502C00C8B3CA /* DataBaseManager.swift */; };
 		36A088F52564898200C8B3CA /* PreferenceTextBasedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088F42564898200C8B3CA /* PreferenceTextBasedCollectionViewCell.swift */; };
@@ -68,7 +68,7 @@
 		36A088DC25633BD600C8B3CA /* WatchlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewController.swift; sourceTree = "<group>"; };
 		36A088DF25634B2300C8B3CA /* CustomUITabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUITabBarItem.swift; sourceTree = "<group>"; };
 		36A088E225643A9C00C8B3CA /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
-		36A088E525644C6000C8B3CA /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		36A088E525644C6000C8B3CA /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
 		36A088E825644E0600C8B3CA /* Cryptocurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptocurrency.swift; sourceTree = "<group>"; };
 		36A088EC2564502C00C8B3CA /* DataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
 		36A088F42564898200C8B3CA /* PreferenceTextBasedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceTextBasedCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -144,7 +144,7 @@
 				36A088DC25633BD600C8B3CA /* WatchlistViewController.swift */,
 				36A088E225643A9C00C8B3CA /* NotificationsViewController.swift */,
 				3600DC132574249D007D374B /* AddNotification */,
-				36A088E525644C6000C8B3CA /* ProfileViewController.swift */,
+				36A088E525644C6000C8B3CA /* PreferencesViewController.swift */,
 				36A0890625657D3600C8B3CA /* PreferenceSelectionViewController.swift */,
 			);
 			path = Controllers;
@@ -332,7 +332,7 @@
 				3644062F256FF4B200990D93 /* NotificationPresentationController.swift in Sources */,
 				36F6258925604F02007EFA32 /* AppDelegate.swift in Sources */,
 				36A088D12561D89900C8B3CA /* Constants.swift in Sources */,
-				36A088E625644C6000C8B3CA /* ProfileViewController.swift in Sources */,
+				36A088E625644C6000C8B3CA /* PreferencesViewController.swift in Sources */,
 				361ED8A72576789D0064E7F9 /* GraphTimelineSelectionButton.swift in Sources */,
 				36A088C02561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift in Sources */,
 				36A089002564938200C8B3CA /* PreferenceSwitchBasedCollectionViewCell.swift in Sources */,

@@ -9,7 +9,7 @@ import UIKit
 
 // TODO: Notification Switch vibrates when selected, do same vibration for text based option selection
 
-class ProfileViewController: UIViewController {
+class PreferencesViewController: UIViewController {
 
     let viewTitle: UILabel = {
         let label = UILabel()
@@ -109,7 +109,7 @@ class ProfileViewController: UIViewController {
 }
 
 //MARK: - CollectionView Section
-extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension PreferencesViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return textBasedPreferences.count + switchBasedPreferences.count
@@ -175,7 +175,7 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
 }
 
-extension ProfileViewController: PreferenceSwitchBasedCollectionViewCellDelegate{
+extension PreferencesViewController: PreferenceSwitchBasedCollectionViewCellDelegate{
     func switchToggleChangedState(_ collectionViewCell: UICollectionViewCell, switchToggle: UISwitch) {
         let indexPath: IndexPath = preferencesCollectionView.indexPath(for: collectionViewCell)!
         if indexPath.row < switchBasedPreferences.count {
