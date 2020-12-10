@@ -222,6 +222,10 @@ class AddNotificationViewController: UIViewController {
         let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
         let text = "Add notification when\n" + symbolName + " price is " + currentValue + currentCurrencySymbol
         creatingNotificationExplanationLabel.text = text
+        
+        if (selectedPriceHelperLabel.text?.count ?? 0) > 0 && selectedPriceHelperLabel.textColor == .red {
+            selectedPriceHelperLabel.textColor = Constants.NotificationController.Cell.Color.selectedPriceHelperLabel
+        }
     }
     
     private func configureMainViewContents(){
@@ -315,28 +319,36 @@ class AddNotificationViewController: UIViewController {
         if let notificationSetValueText = selectedPriceTextField.text, let currentPrice = selectedCurrentPrice {
             // Modify textfield String Text
             
-            if let setValue = getDoubleFromStringWithLocale(valueText: notificationSetValueText), setValue > 0 {
+            if let setValue = getDoubleFromStringWithLocale(valueText: notificationSetValueText) {
                 
-                let isAboveCurrent = setValue > currentPrice
-                
-                let date = Date()
-                let dateFormat = DateFormatter()
-                dateFormat.dateFormat = "yyyy-MM-dd"
-                
-                let creationDate = dateFormat.string(from: date)
-                
-                let notification = Cryptocurrency.CurrencyNotification(setValue: setValue, aboveValue: isAboveCurrent, creationDate: creationDate, currencyType: notificationCurrencyType, isOn: true)
-                
-                data?.notifications.append(notification)
-                
-                if let transitioningDelegate = self.transitioningDelegate as? NotificationTransitioningDelegate{
+                if setValue > 0 {
+                    let isAboveCurrent = setValue > currentPrice
                     
-                    transitioningDelegate.transitionDirection = .toBottom
-                    dismiss(animated: true) {
-                        self.viewDidDisappear(true)
+                    let date = Date()
+                    let dateFormat = DateFormatter()
+                    dateFormat.dateFormat = "yyyy-MM-dd"
+                    
+                    let creationDate = dateFormat.string(from: date)
+                    
+                    let notification = Cryptocurrency.CurrencyNotification(setValue: setValue, aboveValue: isAboveCurrent, creationDate: creationDate, currencyType: notificationCurrencyType, isOn: true)
+                    
+                    data?.notifications.append(notification)
+                    
+                    if let transitioningDelegate = self.transitioningDelegate as? NotificationTransitioningDelegate{
+                        
+                        transitioningDelegate.transitionDirection = .toBottom
+                        dismiss(animated: true) {
+                            self.viewDidDisappear(true)
+                        }
+                        
                     }
-                    
+                }else{
+//                    else if (selectedPriceTextField.text?.count ?? 0) <= 0 {
+                    selectedPriceHelperLabel.textColor = .red
+//                    }
                 }
+            }else if (selectedPriceTextField.text?.count ?? 0) <= 0 {
+                selectedPriceHelperLabel.textColor = .red
             }
         }
     }
