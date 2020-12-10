@@ -12,9 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        let defaults = UserDefaults.standard
-        
+                
         // if App launched for the first time, configure default preferences
         if !UserDefaultsManager.getAlreadyLaunchedStatus() {
             print("Never launched before")
