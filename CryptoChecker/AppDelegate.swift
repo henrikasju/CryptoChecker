@@ -16,36 +16,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaults = UserDefaults.standard
         
         // if App launched for the first time, configure default preferences
-        if !defaults.bool(forKey: Constants.UserDefaults.alreadyLaunched.key) {
+        if !UserDefaultsManager.getAlreadyLaunchedStatus() {
             print("Never launched before")
             
-            defaults.set(true, forKey: Constants.UserDefaults.alreadyLaunched.key)
+            UserDefaultsManager.setAlreadyLaunchedStatus(haveLaunched: true)
             // Setting global notificatino status
-            defaults.set(Constants.UserDefaults.globalNotificationStatus.defaultValue, forKey: Constants.UserDefaults.globalNotificationStatus.key)
+            UserDefaultsManager.setUserGlobalNotificationStatus(isOn: Constants.UserDefaults.globalNotificationStatus.defaultValue)
             // Setting data format
-            defaults.set(Constants.UserDefaults.dataFormat.defaultValue, forKey: Constants.UserDefaults.dataFormat.key)
+            UserDefaultsManager.setDataFormat(dataFormat: Constants.UserDefaults.dataFormat.defaultValue)
             // Setting time format
-            defaults.set(Constants.UserDefaults.timeFormat.defaultValue, forKey: Constants.UserDefaults.timeFormat.key)
+            UserDefaultsManager.setTimeFormat(timeFormat: Constants.UserDefaults.timeFormat.defaultValue)
             // Setting Fiat currency
-            defaults.set( Constants.UserDefaults.fiatCurrency.defaultValue, forKey: Constants.UserDefaults.fiatCurrency.key)
+            UserDefaultsManager.setFiatCurrency(fiatCurrency: Constants.UserDefaults.fiatCurrency.defaultValue)
         }else{
             print("Had launched before")
-            var settings: [String:Any] = [:]
-            
-            settings[Constants.UserDefaults.alreadyLaunched.key] = defaults.bool(forKey: Constants.UserDefaults.alreadyLaunched.key)
-            
-            settings[Constants.UserDefaults.globalNotificationStatus.key] = defaults.bool(forKey: Constants.UserDefaults.globalNotificationStatus.key)
-            
-            settings[Constants.UserDefaults.dataFormat.key] = defaults.string(forKey: Constants.UserDefaults.dataFormat.key)
-            
-            settings[Constants.UserDefaults.timeFormat.key] = defaults.string(forKey: Constants.UserDefaults.timeFormat.key)
-            
-            settings[Constants.UserDefaults.fiatCurrency.key] = defaults.string(forKey: Constants.UserDefaults.fiatCurrency.key)
-            
-            print(settings)
-            
         }
-        
         
         return true
     }

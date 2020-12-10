@@ -37,6 +37,7 @@
 		36A089122565A85B00C8B3CA /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A089112565A85B00C8B3CA /* NotificationTableViewCell.swift */; };
 		36A089162565DF0B00C8B3CA /* NotificationTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A089152565DF0A00C8B3CA /* NotificationTableViewHeaderView.swift */; };
 		36B49D3D25683E8B00AC6BC6 /* AddNotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B49D3C25683E8B00AC6BC6 /* AddNotificationViewController.swift */; };
+		36EABE0525825FF700A83027 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EABE0425825FF700A83027 /* UserDefaultsManager.swift */; };
 		36F6258925604F02007EFA32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F6258825604F02007EFA32 /* AppDelegate.swift */; };
 		36F6258B25604F02007EFA32 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F6258A25604F02007EFA32 /* SceneDelegate.swift */; };
 		36F6258D25604F02007EFA32 /* CryptocurrenciesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F6258C25604F02007EFA32 /* CryptocurrenciesViewController.swift */; };
@@ -75,6 +76,7 @@
 		36A089112565A85B00C8B3CA /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
 		36A089152565DF0A00C8B3CA /* NotificationTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewHeaderView.swift; sourceTree = "<group>"; };
 		36B49D3C25683E8B00AC6BC6 /* AddNotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNotificationViewController.swift; sourceTree = "<group>"; };
+		36EABE0425825FF700A83027 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		36F6258525604F02007EFA32 /* CryptoChecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoChecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36F6258825604F02007EFA32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36F6258A25604F02007EFA32 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				36A088EC2564502C00C8B3CA /* DataBaseManager.swift */,
+				36EABE0425825FF700A83027 /* UserDefaultsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				361ED8B12576A7E60064E7F9 /* CurrencyDetailHeaderCollectionReusableView.swift in Sources */,
 				361ED8AD25769B2D0064E7F9 /* CurrencyDetailCollectionViewCell.swift in Sources */,
 				36A0890725657D3800C8B3CA /* PreferenceSelectionViewController.swift in Sources */,
+				36EABE0525825FF700A83027 /* UserDefaultsManager.swift in Sources */,
 				36A088E025634B2300C8B3CA /* CustomUITabBarItem.swift in Sources */,
 				36F6258D25604F02007EFA32 /* CryptocurrenciesViewController.swift in Sources */,
 				36A089122565A85B00C8B3CA /* NotificationTableViewCell.swift in Sources */,
