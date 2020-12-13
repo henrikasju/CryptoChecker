@@ -8,15 +8,13 @@
 import UIKit
 
 class CryptocurrencyManager {
-    
-    let valueFloatingPointFiat: String = "%.2f"
-    let valueFloatingPointBitcoin: String = "%.5f"
-    let valueChangeFloatingPoint: String = "%.1f"
-    
+
     var conversionRates: [String: Double]
+    var fiatSymbols: [String: String]
     
     init() {
         conversionRates = [:]
+        fiatSymbols = [:]
         
         conversionRates["USD"] = 1.0
         conversionRates["Euro"] = 0.82
@@ -24,12 +22,12 @@ class CryptocurrencyManager {
     }
     
     // Converting cryptocurrency value from USD to selected Fiat currency
-    public func getValueAsFiatDouble(value: Double, fiatSymbol: String) -> Double{
+    public func getValueAsFiatDouble(value: Double, fiatName: String) -> Double{
         var returnResult: Double = value
         
         // Checking if requested fiat is available
-        if conversionRates.keys.contains(fiatSymbol) {
-            returnResult *= conversionRates[fiatSymbol]!
+        if conversionRates.keys.contains(fiatName) {
+            returnResult *= conversionRates[fiatName]!
         
         // Unknown requested fiat, returning as USD
         }else{
@@ -38,4 +36,5 @@ class CryptocurrencyManager {
         
         return returnResult
     }
+
 }

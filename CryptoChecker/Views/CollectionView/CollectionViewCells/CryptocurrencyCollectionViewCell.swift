@@ -61,6 +61,8 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .right
         label.text = "00.00"
         label.font = Constants.CurrencyCollection.Cell.Fonts.currencyValue
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.80
         return label
     }()
     
@@ -88,6 +90,8 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
 
     }
     
+    
+    // TODO: remove logic from view!
     public func updateFieldWithData(data: Cryptocurrency, representAsFiat: Bool)
     {
         var valueChangeColor: UIColor
@@ -117,8 +121,9 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
         currencyTextSymbolLabel.text = data.symbolName
         
         // Currency Value
-        let symbol: String = (representAsFiat ? "$" : "₿")
-        currencyValueLabel.text = (representAsFiat ? data.getFiatValueAsString() : data.getBitcoinValueAsString()) + symbol
+        let preferenceManager = PreferencesManager()
+        let symbol: String = (representAsFiat ? preferenceManager.getFiatSymbol() : "₿")
+        currencyValueLabel.text = (representAsFiat ? preferenceManager.getFiatValueString(cryptocurrency: data) : data.getBitcoinValueAsString()) + symbol
         
         // Watchlist button status
         currencyWatchlistButton.isSelected = data.watchlisted

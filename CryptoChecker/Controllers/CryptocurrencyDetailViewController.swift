@@ -98,6 +98,8 @@ class CryptocurrencyDetailViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
+        
+        currencyDisplaySelectionView.fiatButton.setTitle(UserDefaultsManager.getFiatCurrency(), for: .normal)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
