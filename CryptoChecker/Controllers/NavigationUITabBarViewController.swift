@@ -15,7 +15,7 @@ class NavigationUITabBarViewController: UITabBarController {
         let firstViewController = UINavigationController(rootViewController: CryptocurrenciesViewController())
         let secondViewController = UINavigationController(rootViewController: WatchlistViewController())
         let thirdViewController = UINavigationController(rootViewController: NotificationsViewController())
-        let fourthViewController = UINavigationController(rootViewController: ProfileViewController())
+        let fourthViewController = UINavigationController(rootViewController: PreferencesViewController())
         
 
         firstViewController.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "currencies"), tag: 1)

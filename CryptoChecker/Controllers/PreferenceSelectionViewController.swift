@@ -10,6 +10,7 @@ import UIKit
 class PreferenceSelectionViewController: UIViewController {
     
     var viewData: PreferenceTextBased?
+    var superViewClosure: ((String) -> ())? = nil
     
     let viewTitle: UILabel = {
         let label = UILabel()
@@ -112,13 +113,18 @@ extension PreferenceSelectionViewController: UICollectionViewDataSource, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let data = viewData{
+        if let data = viewData, let selectedOption = data.selectedOption {
             // TODO: Unwrap safer!
-            data.selectedOption?.selected = false
+            selectedOption.selected = false
             
             let index: Int = indexPath.row
             data.selectedOption = data.options[index]
             data.selectedOption?.selected = true
+            
+            if let closure = superViewClosure {
+                closure(data.options[index].title)
+            }
+            
             
             selectionCollectionView.reloadData()
         }

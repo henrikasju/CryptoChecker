@@ -142,7 +142,17 @@ class NotificationTableViewCell: UITableViewCell {
         
         titleLabel.attributedText = currencySymbolLabelAttributedString
         
-        dateLabel.text = "Creation date " + data.date
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "yyyy-mm-dd"
+        
+        var formatedDate = "None"
+        
+        if let date = dateFormater.date(from: data.date){
+            dateFormater.dateFormat = UserDefaultsManager.getDateFormat().lowercased()
+            formatedDate = dateFormater.string(from: date)
+        }
+        
+        dateLabel.text = "Creation date " + formatedDate
         
         statusSwitch.setOn(data.isOn, animated: false)
     }

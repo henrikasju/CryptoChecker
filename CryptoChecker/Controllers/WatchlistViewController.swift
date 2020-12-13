@@ -28,37 +28,13 @@ class WatchlistViewController: UIViewController {
         return label
     }()
     
-    let fiatButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.heightAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionHeight).isActive = true
-        button.widthAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionWidth).isActive = true
-        button.setTitle("USD", for: .normal)
-        button.titleLabel?.font = Constants.CryptoCurrenciesController.Fonts.currencySelection
+    let currencyDisplaySelectionView: CurrencyDisplaySelectionView = {
+        let view = CurrencyDisplaySelectionView(buttonsHeight: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionHeight,
+                                                buttonsWidth: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionWidth,
+                                                spacing: 16.0)
+        view.translatesAutoresizingMaskIntoConstraints = false
         
-        button.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-        button.setTitleColor(Constants.AppColors.Text.selectedOption, for: .selected)
-        button.setTitleColor(Constants.AppColors.Text.notSelectedOption, for: .normal)
-        button.isSelected = true
-        button.layer.cornerRadius = Constants.CryptoCurrenciesController.ViewSizes.currencySelectionRoundness
-
-        return button
-    }()
-    
-    let bitcoinButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.heightAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionHeight).isActive = true
-        button.widthAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionWidth).isActive = true
-        button.setTitle("BTC", for: .normal)
-        button.titleLabel?.font = Constants.CryptoCurrenciesController.Fonts.currencySelection
-        
-        button.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-        button.setTitleColor(Constants.AppColors.Text.selectedOption, for: .selected)
-        button.setTitleColor(Constants.AppColors.Text.notSelectedOption, for: .normal)
-        button.layer.cornerRadius = Constants.CryptoCurrenciesController.ViewSizes.currencySelectionRoundness
-        
-        return button
+        return view
     }()
     
     private var watchlistedCurrencies: [Cryptocurrency] = []
@@ -75,6 +51,8 @@ class WatchlistViewController: UIViewController {
         if !firstViewLoad {
             watchlistCollectionView.reloadData()
         }
+        
+        currencyDisplaySelectionView.fiatButton.setTitle(UserDefaultsManager.getFiatCurrency(), for: .normal)
     }
 
     override func viewDidLoad() {
@@ -88,16 +66,14 @@ class WatchlistViewController: UIViewController {
         watchlistCollectionView.register(CryptocurrencyCollectionViewCell.self, forCellWithReuseIdentifier: CryptocurrencyCollectionViewCell.identifier)
         
         view.addSubview(viewTitle)
-        view.addSubview(fiatButton)
-        view.addSubview(bitcoinButton)
+        view.addSubview(currencyDisplaySelectionView)
         view.addSubview(watchlistCollectionView)
         
         setupTitleLabel()
         setupButtons()
         setupCollectionView()
         
-        fiatButton.addTarget(self, action: #selector(currencyConversionButtonPressed(sender: )), for: .touchUpInside)
-        bitcoinButton.addTarget(self, action: #selector(currencyConversionButtonPressed(sender: )), for: .touchUpInside)
+        currencyDisplaySelectionView.setTargetToButtons(target: self, action: #selector(currencyConversionButtonPressed(sender:)), event: .touchUpInside)
     }
     
     private func setupTitleLabel(){
@@ -107,33 +83,19 @@ class WatchlistViewController: UIViewController {
     }
     
     private func setupButtons(){
-        fiatButton.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 8).isActive = true
-        fiatButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        
-        bitcoinButton.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 8).isActive = true
-        bitcoinButton.leadingAnchor.constraint(equalTo: fiatButton.trailingAnchor, constant: 16).isActive = true
+        currencyDisplaySelectionView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 8).isActive = true
+        currencyDisplaySelectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
     }
     
     private func setupCollectionView(){
         
         NSLayoutConstraint.activate([
-            watchlistCollectionView.topAnchor.constraint(equalTo: fiatButton.bottomAnchor, constant: 16),
+            watchlistCollectionView.topAnchor.constraint(equalTo: currencyDisplaySelectionView.bottomAnchor, constant: 16),
             watchlistCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             watchlistCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             watchlistCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
         ])
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
@@ -208,50 +170,26 @@ extension WatchlistViewController: CryptocurrencyCollectionViewCellDelegate{
 //MARK: - Button Action Section
 extension WatchlistViewController{
     
-    @objc private func currencyConversionButtonPressed(sender: UIButton){
-        if sender == fiatButton {
-            print("Fiat Button pressed!")
+    @objc func currencyConversionButtonPressed(sender: UIButton){
+        
+        if sender == currencyDisplaySelectionView.fiatButton {
+            representDataToFiat = true
+            currencyDisplaySelectionView.fiatButton.isSelected = true
+            currencyDisplaySelectionView.fiatButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
             
-            if fiatButton.isSelected {
-                fiatButton.isSelected = false
-                fiatButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-                
-                bitcoinButton.isSelected = true
-                bitcoinButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-                
-                representDataToFiat = false
-            }else{
-                fiatButton.isSelected = true
-                fiatButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-                
-                bitcoinButton.isSelected = false
-                bitcoinButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-                
-                representDataToFiat = true
-            }
-        }else if( sender == bitcoinButton){
-            print("BTC Button pressed!")
+            currencyDisplaySelectionView.cryptoButton.isSelected = false
+            currencyDisplaySelectionView.cryptoButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
+
+        }else if sender == currencyDisplaySelectionView.cryptoButton {
+            representDataToFiat = false
+            currencyDisplaySelectionView.fiatButton.isSelected = false
+            currencyDisplaySelectionView.fiatButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
             
-            if bitcoinButton.isSelected {
-                bitcoinButton.isSelected = false
-                bitcoinButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-                
-                fiatButton.isSelected = true
-                fiatButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-                
-                representDataToFiat = true
-            }else{
-                bitcoinButton.isSelected = true
-                bitcoinButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-                
-                fiatButton.isSelected = false
-                fiatButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-                
-                representDataToFiat = false
-            }
+            currencyDisplaySelectionView.cryptoButton.isSelected = true
+            currencyDisplaySelectionView.cryptoButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
         }
         
-        if(sender == fiatButton || sender == bitcoinButton){
+        if(sender == currencyDisplaySelectionView.fiatButton || sender == currencyDisplaySelectionView.cryptoButton) {
             // UPDATE
             watchlistCollectionView.reloadData()
         }

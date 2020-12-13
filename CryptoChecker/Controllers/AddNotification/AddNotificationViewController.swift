@@ -314,7 +314,7 @@ class AddNotificationViewController: UIViewController {
     @objc func addNotificationButtonPressed(sender: UIButton){
                 
         let notificationCurrencyType = (representDataToFiat ? "USD" : "BTC")
-        let selectedCurrentPrice = (representDataToFiat ? data?.valueFiat : data?.valueBitcoin)
+        let selectedCurrentPrice = (representDataToFiat ? data?.valueFiat : data?.value)
 
         if let notificationSetValueText = selectedPriceTextField.text, let currentPrice = selectedCurrentPrice {
             // Modify textfield String Text

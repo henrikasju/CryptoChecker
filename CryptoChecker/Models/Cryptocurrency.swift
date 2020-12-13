@@ -102,7 +102,7 @@ class Cryptocurrency: NSObject {
     var symbolName: String
     var image: UIImage
     var valueFiat: Double
-    var valueBitcoin: Double
+    var value: Double
     var change: Double
     var watchlisted: Bool
     var notifications: [CurrencyNotification]
@@ -113,7 +113,7 @@ class Cryptocurrency: NSObject {
         self.symbolName = symbolName
         self.image = image
         self.valueFiat = valueFiat
-        self.valueBitcoin = valueBitcoin
+        self.value = valueBitcoin
         self.change = valueChange
         self.watchlisted = watchlisted
         self.notifications = []
@@ -125,7 +125,7 @@ class Cryptocurrency: NSObject {
         self.symbolName = currency.symbolName
         self.image = currency.image
         self.valueFiat = currency.valueFiat
-        self.valueBitcoin = currency.valueBitcoin
+        self.value = currency.value
         self.change = currency.change
     }
     
@@ -138,6 +138,6 @@ class Cryptocurrency: NSObject {
     }
     
     public func getBitcoinValueAsString() -> String{
-        return String(format: Cryptocurrency.valueFloatingPointBitcoin, valueBitcoin)
+        return String(format: Cryptocurrency.valueFloatingPointBitcoin, value)
     }
 }
