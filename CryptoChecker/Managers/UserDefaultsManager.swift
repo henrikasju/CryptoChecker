@@ -40,8 +40,8 @@ final class UserDefaultsManager {
     
     // Returning selected date format from User defaults
     public static func getFiatCurrency() -> String {
-        let returnString: String = defaults.string(forKey: Constants.UserDefaults.dataFormat.key)
-                                   ?? Constants.UserDefaults.dataFormat.defaultValue
+        let returnString: String = defaults.string(forKey: Constants.UserDefaults.fiatCurrency.key)
+                                   ?? Constants.UserDefaults.fiatCurrency.defaultValue
         
         return returnString
     }
@@ -69,6 +69,14 @@ final class UserDefaultsManager {
     // Setting fiatCurrency to provided value
     public static func setFiatCurrency(fiatCurrency: String) {
         defaults.set(fiatCurrency, forKey: Constants.UserDefaults.fiatCurrency.key)
+    }
+    
+    public static func printAllValues(){
+        print("Already Launched: ", Self.getAlreadyLaunchedStatus())
+        print("Global Notifications are : ", (self.getUserGlobalNotificationStatus() ? "On" : "Off"))
+        print("Date Format: ", self.getDateFormat())
+        print("Time Format: ", self.getTimeFormat())
+        print("Fiat Currency: " ,self.getFiatCurrency())
     }
     
 }

@@ -29,28 +29,30 @@ class PreferencesViewController: UIViewController {
         return collectionView
     }()
     
-    let switchBasedPreferences: [PreferenceSwitchBased] = [
-        PreferenceSwitchBased(title: "Notifications", onStatus: true)
+    // TODO: Remove HardCode! PreferenceSwitchBased
+    
+    var switchBasedPreferences: [ (value: PreferenceSwitchBased, closure: (Bool) -> ())] = [
+        (PreferenceSwitchBased(title: "Notifications", onStatus: true), UserDefaultsManager.setUserGlobalNotificationStatus(isOn: )),
     ]
     
-    let textBasedPreferences: [PreferenceTextBased] = [
-        PreferenceTextBased(title: "Data Format",
+    var textBasedPreferences: [ (values: PreferenceTextBased, updateClosure: (String) -> () )] = [
+        (PreferenceTextBased(title: "Data Format",
                             options: [
                                     PreferenceTextBased.Option(title: "DD-MM-YYYY", selected: false),
-                                PreferenceTextBased.Option(title: "YYYY-MM-DD", selected: true),
+                                PreferenceTextBased.Option(title: "YYYY-MM-DD", selected: false),
                                     PreferenceTextBased.Option(title: "MM-DD-YY", selected: false),
-                                    ]),
-        PreferenceTextBased(title: "Time Format",
+                            ]), UserDefaultsManager.setDataFormat(dataFormat:)),
+        (PreferenceTextBased(title: "Time Format",
                             options: [
-                                    PreferenceTextBased.Option(title: "24 Hours", selected: true),
+                                    PreferenceTextBased.Option(title: "24 Hours", selected: false),
                                     PreferenceTextBased.Option(title: "12 Hours", selected: false),
-                                    ]),
-        PreferenceTextBased(title: "Fiat Currency",
+                            ]), UserDefaultsManager.setTimeFormat(timeFormat:)),
+        (PreferenceTextBased(title: "Fiat Currency",
                             options: [
                                     PreferenceTextBased.Option(title: "Yen", selected: false),
                                     PreferenceTextBased.Option(title: "Euro", selected: false),
-                                    PreferenceTextBased.Option(title: "USD", selected: true),
-                                    ]),
+                                    PreferenceTextBased.Option(title: "USD", selected: false),
+                            ]), UserDefaultsManager.setFiatCurrency(fiatCurrency:)),
     ]
     
     var firstViewLoad: Bool = true
@@ -59,9 +61,53 @@ class PreferencesViewController: UIViewController {
         super.viewWillAppear(animated) 
         navigationController?.isNavigationBarHidden = true
         
+        // TODO: Update with DB!
+        // Updating Preference selections
+        // Global Notifications
+        switchBasedPreferences[0].value.onStatus = UserDefaultsManager.getUserGlobalNotificationStatus();
+        
+        // Reseting all
+        textBasedPreferences.forEach { (arg0) in
+            let (values, _) = arg0
+            values.options.forEach { (option) in
+                option.selected = false
+            }
+        }
+        
+        // Date Format
+        let selectedDateFormat = UserDefaultsManager.getDateFormat()
+        for item in textBasedPreferences[0].values.options {
+            if item.title == selectedDateFormat {
+                item.selected = true
+                textBasedPreferences[0].values.selectedOption = item
+                break
+            }
+        }
+        
+        // Time Format
+        let selectedTimeFormat = UserDefaultsManager.getTimeFormat()
+        for item in textBasedPreferences[1].values.options {
+            if item.title == selectedTimeFormat {
+                item.selected = true
+                textBasedPreferences[1].values.selectedOption = item
+                break
+            }
+        }
+        
+        // Fiat currency
+        let fiatCurrencyFormat = UserDefaultsManager.getFiatCurrency()
+        for item in textBasedPreferences[2].values.options {
+            if item.title == fiatCurrencyFormat {
+                item.selected = true
+                textBasedPreferences[2].values.selectedOption = item
+                break
+            }
+        }
+        
         if !firstViewLoad {
             preferencesCollectionView.reloadData()
         }
+        
     }
     
     override func viewDidLoad() {
@@ -94,17 +140,6 @@ class PreferencesViewController: UIViewController {
         preferencesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         preferencesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
@@ -138,7 +173,10 @@ extension PreferencesViewController: UICollectionViewDelegate, UICollectionViewD
             }
             
             // TODO: Needs unwraping and check
-            cell.updateFieldWithData(preference: switchBasedPreferences[indexPath.row])
+            let index: Int = indexPath.row
+            let selection = switchBasedPreferences[index]
+            
+            cell.updateFieldWithData(preference: selection.value)
             
             returnCell = cell
         }else{
@@ -147,14 +185,13 @@ extension PreferencesViewController: UICollectionViewDelegate, UICollectionViewD
             }
             
             // TODO: Needs unwraping and check
-            cell.updateFieldWithData(preference: textBasedPreferences[(indexPath.row - switchBasedPreferences.count)])
+            let index: Int = indexPath.row - switchBasedPreferences.count
+            let selection = textBasedPreferences[index]
+            
+            cell.updateFieldWithData(preference: selection.values)
             
             returnCell = cell
         }
-
-//        if cell.delegate == nil {
-//            cell.delegate = self
-//        }
 
         
         return returnCell!
@@ -165,11 +202,15 @@ extension PreferencesViewController: UICollectionViewDelegate, UICollectionViewD
         if indexPath.row >= switchBasedPreferences.count{
             // Selected Text Based Cell
             let index: Int = indexPath.row - switchBasedPreferences.count
-            let selection: PreferenceTextBased = textBasedPreferences[index]
+            let selection = textBasedPreferences[index]
             
-            // TODO: Perhaps add additional check of empty selection object 
+            // TODO: Fix this with more elegant way. perhaps DB. Right now very hard cupling
+            // vc.superViewClosure
+            
             let vc = PreferenceSelectionViewController()
-            vc.viewData = selection
+            vc.viewData = selection.values
+            vc.superViewClosure = selection.updateClosure
+            
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -181,8 +222,9 @@ extension PreferencesViewController: PreferenceSwitchBasedCollectionViewCellDele
         if indexPath.row < switchBasedPreferences.count {
             let index: Int = indexPath.row
             
-            let selection: PreferenceSwitchBased = switchBasedPreferences[index]
-            selection.onStatus = switchToggle.isOn
+            let selection = switchBasedPreferences[index]
+            selection.value.onStatus = switchToggle.isOn
+            selection.closure(switchToggle.isOn)
         }
         
         preferencesCollectionView.reloadData()
