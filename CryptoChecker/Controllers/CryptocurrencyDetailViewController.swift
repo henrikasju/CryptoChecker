@@ -190,18 +190,6 @@ class CryptocurrencyDetailViewController: UIViewController {
             currencyDisplaySelectionView.leadingAnchor.constraint(equalTo: currencyTitleLabel.leadingAnchor, constant: 0),
             currencyDisplaySelectionView.topAnchor.constraint(equalTo: currencyTitleLabel.bottomAnchor, constant: 8),
             currencyDisplaySelectionView.heightAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionHeight),
-
-            
-//            currencyGraphSectionView.topAnchor.constraint(equalTo: mainSectionScrollView.topAnchor, constant: 0),
-//            currencyGraphSectionView.leadingAnchor.constraint(equalTo: mainSectionScrollView.leadingAnchor, constant: 0),
-//            currencyGraphSectionView.trailingAnchor.constraint(equalTo: mainSectionScrollView.trailingAnchor, constant: 0),
-//            currencyGraphSectionView.heightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.heightAnchor, multiplier: 1/2.6),
-            
-//            currencyDetailsCollectionView.topAnchor.constraint(equalTo: currencyGraphSectionView.bottomAnchor, constant: 12),
-//            currencyDetailsCollectionView.leadingAnchor.constraint(equalTo: mainSectionScrollView.leadingAnchor, constant: 0),
-//            currencyDetailsCollectionView.trailingAnchor.constraint(equalTo: mainSectionScrollView.trailingAnchor, constant: 0),
-//            currencyDetailsCollectionView.bottomAnchor.constraint(equalTo: mainSectionScrollView.bottomAnchor, constant: 0),
-//            currencyDetailsCollectionView.heightAnchor.constraint(equalToConstant: 900),
             
             currencyGraphSectionView.topAnchor.constraint(equalTo: currencyDisplaySelectionView.bottomAnchor, constant: 12),
             currencyGraphSectionView.leadingAnchor.constraint(equalTo: currencyDisplaySelectionView.leadingAnchor),
@@ -296,7 +284,11 @@ extension CryptocurrencyDetailViewController: UICollectionViewDelegate, UICollec
             }
         }else if let valueDetail = cellDetail as? Cryptocurrency.CurrencyDetailSection.CurrencyValueDetail {
             if self.representDataToFiat {
-                cell.updateFieldWithData(title: valueDetail.detailTitle, detail: valueDetail.getFiatValueAsString()+currentCurrencySymbol, atributedDetail: nil)
+                let preferenceManager = PreferencesManager()
+                let fiatSymbol = preferenceManager.getFiatSymbol();
+                let valueOfFiat = preferenceManager.getFiatValueString(value: valueDetail.fiatValue)
+                
+                cell.updateFieldWithData(title: valueDetail.detailTitle, detail: valueOfFiat+fiatSymbol, atributedDetail: nil)
             }else{
                 cell.updateFieldWithData(title: valueDetail.detailTitle, detail: valueDetail.getCryptoValueAsString()+currentCurrencySymbol, atributedDetail: nil)
             }

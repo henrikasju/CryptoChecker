@@ -123,7 +123,7 @@ class CryptocurrencyCollectionViewCell: UICollectionViewCell {
         // Currency Value
         let preferenceManager = PreferencesManager()
         let symbol: String = (representAsFiat ? preferenceManager.getFiatSymbol() : "₿")
-        currencyValueLabel.text = (representAsFiat ? preferenceManager.getFiatValueString(cryptocurrency: data) : data.getBitcoinValueAsString()) + symbol
+        currencyValueLabel.text = (representAsFiat ? preferenceManager.getFiatValueString(value: data.valueFiat) : data.getBitcoinValueAsString()) + symbol
         
         // Watchlist button status
         currencyWatchlistButton.isSelected = data.watchlisted
