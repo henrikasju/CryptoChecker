@@ -15,12 +15,16 @@ final class PreferencesManager{
     
     var fiatSymbols: [String: String]
     
+    let cryptocurrencyManager: CryptocurrencyManager
+    
     init() {
         fiatSymbols = [:]
         
         fiatSymbols["USD"] = "$"
         fiatSymbols["Euro"] = "€"
         fiatSymbols["Yen"] = "¥"
+        
+        cryptocurrencyManager = CryptocurrencyManager()
     }
     
     // Returning selected Fiat Symbol
@@ -42,7 +46,6 @@ final class PreferencesManager{
     
     // returning cryptocurrency value as selected fiat value
     public func getFiatValue(value: Double) -> Double {
-        let cryptocurrencyManager: CryptocurrencyManager = CryptocurrencyManager()
         let selectedCurrencySymbol: String = getFiatName()
         
         return cryptocurrencyManager.getValueAsFiatDouble(value: value, fiatName: selectedCurrencySymbol)
@@ -50,6 +53,11 @@ final class PreferencesManager{
     
     // returning fiat value as string
     public func getFiatValueString(value: Double) -> String {
-        return String(format: valueFloatingPointFiat ,getFiatValue(value: value))
+        return String(format: valueFloatingPointFiat, getFiatValue(value: value))
+    }
+    
+    // returning cryptocurrency value as String
+    public func getValueAsCryptoString(value: Double) -> String {
+        return String(format: valueFloatingPointBitcoin, value)
     }
 }
