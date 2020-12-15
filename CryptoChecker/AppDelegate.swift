@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !UserDefaultsManager.getAlreadyLaunchedStatus() {
             print("Never launched before")
             
-            UserDefaultsManager.setAlreadyLaunchedStatus(haveLaunched: true)
             // Setting global notificatino status
             UserDefaultsManager.setUserGlobalNotificationStatus(isOn: Constants.UserDefaults.globalNotificationStatus.defaultValue)
             // Setting data format
@@ -26,8 +25,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaultsManager.setTimeFormat(timeFormat: Constants.UserDefaults.timeFormat.defaultValue)
             // Setting Fiat currency
             UserDefaultsManager.setFiatCurrency(fiatCurrency: Constants.UserDefaults.fiatCurrency.defaultValue)
+            // Setting haveLaunchedProperty to true
+            UserDefaultsManager.setAlreadyLaunchedStatus(haveLaunched: true)
         }else{
             print("Had launched before")
+            UserDefaultsManager.printAllValues()
         }
         
         return true
