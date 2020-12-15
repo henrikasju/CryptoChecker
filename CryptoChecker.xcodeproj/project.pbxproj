@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		360603472589739800681BB3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 360603462589739800681BB3 /* Constants.swift */; };
 		361ED8A125758AA10064E7F9 /* CurrencyDisplaySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A025758AA10064E7F9 /* CurrencyDisplaySelectionView.swift */; };
 		361ED8A4257593EE0064E7F9 /* CurrencyGraphSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */; };
 		361ED8A72576789D0064E7F9 /* GraphTimelineSelectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361ED8A62576789C0064E7F9 /* GraphTimelineSelectionButton.swift */; };
@@ -21,7 +22,6 @@
 		368E0C782566B182009DF52F /* NotificationTableViewBottomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368E0C772566B181009DF52F /* NotificationTableViewBottomCell.swift */; };
 		36A088C02561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088BF2561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift */; };
 		36A088CC2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088CB2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift */; };
-		36A088D12561D89900C8B3CA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088D02561D89900C8B3CA /* Constants.swift */; };
 		36A088D62561E77300C8B3CA /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088D52561E77300C8B3CA /* Extentions.swift */; };
 		36A088DA256334DC00C8B3CA /* NavigationUITabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088D9256334DC00C8B3CA /* NavigationUITabBarViewController.swift */; };
 		36A088DD25633BD600C8B3CA /* WatchlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A088DC25633BD600C8B3CA /* WatchlistViewController.swift */; };
@@ -48,6 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		360603462589739800681BB3 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		361ED8A025758AA10064E7F9 /* CurrencyDisplaySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDisplaySelectionView.swift; sourceTree = "<group>"; };
 		361ED8A3257593EE0064E7F9 /* CurrencyGraphSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyGraphSectionView.swift; sourceTree = "<group>"; };
 		361ED8A62576789C0064E7F9 /* GraphTimelineSelectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphTimelineSelectionButton.swift; sourceTree = "<group>"; };
@@ -62,7 +63,6 @@
 		368E0C772566B181009DF52F /* NotificationTableViewBottomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewBottomCell.swift; sourceTree = "<group>"; };
 		36A088BF2561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptocurrencyCollectionViewCell.swift; sourceTree = "<group>"; };
 		36A088CB2561B14100C8B3CA /* CryptocurrenciesUICollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptocurrenciesUICollectionView.swift; sourceTree = "<group>"; };
-		36A088D02561D89900C8B3CA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = ../../../../../Downloads/Constants.swift; sourceTree = "<group>"; };
 		36A088D52561E77300C8B3CA /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		36A088D9256334DC00C8B3CA /* NavigationUITabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationUITabBarViewController.swift; sourceTree = "<group>"; };
 		36A088DC25633BD600C8B3CA /* WatchlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewController.swift; sourceTree = "<group>"; };
@@ -165,7 +165,7 @@
 		36A088CF2561D88700C8B3CA /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				36A088D02561D89900C8B3CA /* Constants.swift */,
+				360603462589739800681BB3 /* Constants.swift */,
 				36A088D52561E77300C8B3CA /* Extentions.swift */,
 			);
 			path = Helpers;
@@ -331,7 +331,6 @@
 				36A088E925644E0700C8B3CA /* Cryptocurrency.swift in Sources */,
 				3644062F256FF4B200990D93 /* NotificationPresentationController.swift in Sources */,
 				36F6258925604F02007EFA32 /* AppDelegate.swift in Sources */,
-				36A088D12561D89900C8B3CA /* Constants.swift in Sources */,
 				36A088E625644C6000C8B3CA /* PreferencesViewController.swift in Sources */,
 				361ED8A72576789D0064E7F9 /* GraphTimelineSelectionButton.swift in Sources */,
 				36A088C02561879500C8B3CA /* CryptocurrencyCollectionViewCell.swift in Sources */,
@@ -347,6 +346,7 @@
 				36A088F52564898200C8B3CA /* PreferenceTextBasedCollectionViewCell.swift in Sources */,
 				36A088D62561E77300C8B3CA /* Extentions.swift in Sources */,
 				361ED8A4257593EE0064E7F9 /* CurrencyGraphSectionView.swift in Sources */,
+				360603472589739800681BB3 /* Constants.swift in Sources */,
 				364406352570552500990D93 /* NotificationAnimatedTransitioning.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
