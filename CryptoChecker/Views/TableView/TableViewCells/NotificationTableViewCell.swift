@@ -137,8 +137,12 @@ class NotificationTableViewCell: UITableViewCell {
             return attributedString
         }()
         
+        let preferenceManager = PreferencesManager()
+        let valueAsString = preferenceManager.getFiatValueString(value: data.setValue)
+        let currencyType = data.currencyType == "BTC" ? "BTC" : preferenceManager.getFiatName()
+        
         let currencySymbolLabelAttributedString: NSMutableAttributedString = NSMutableAttributedString(attributedString: currencySymbolValueChangeAttachmentString)
-        currencySymbolLabelAttributedString.append(NSMutableAttributedString(string: " " + data.getSetValueAsString() + " " + data.currencyType) )
+        currencySymbolLabelAttributedString.append(NSMutableAttributedString(string: " " + valueAsString + " " + currencyType ) )
         
         titleLabel.attributedText = currencySymbolLabelAttributedString
         
