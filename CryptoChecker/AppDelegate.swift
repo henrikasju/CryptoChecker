@@ -29,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaultsManager.setAlreadyLaunchedStatus(haveLaunched: true)
         }else{
             print("Had launched before")
-            UserDefaultsManager.printAllValues()
         }
         
         return true

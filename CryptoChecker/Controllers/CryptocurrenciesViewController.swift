@@ -55,8 +55,6 @@ class CryptocurrenciesViewController: UIViewController {
         }
         
         currencyDisplaySelectionView.fiatButton.setTitle(UserDefaultsManager.getFiatCurrency(), for: .normal)
-        
-//        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {

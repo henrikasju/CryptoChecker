@@ -45,6 +45,9 @@ class NotificationsViewController: UIViewController {
             navigationController?.isNavigationBarHidden = true
             
             currenciesWithNotifications = DataBaseManager.shareInstance.fetchCryptocurrenciesWithNotifications()
+            currenciesWithNotifications.remove(at: 0)
+            currenciesWithNotifications.remove(at: 0)
+            currenciesWithNotifications.remove(at: 0)
         }else{
             navigationController?.isNavigationBarHidden = false
         }
@@ -184,17 +187,34 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
         if editingStyle == .delete {
+            
             let selectedData = currenciesWithNotifications[indexPath.section]
             // Checking if deleting cell is last in section
             if selectedData.notifications.count > 1 {
                 selectedData.notifications.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.deleteRows(at: [indexPath], with: .left)
+                
             // If selected cell is last in section - deleting section
             }else if selectedData.notifications.count > 0{
+                
+//                selectedData.notifications.remove(at: indexPath.row)
                 currenciesWithNotifications.remove(at: indexPath.section)
-                selectedData.notifications.remove(at: indexPath.row)
                 tableView.deleteSections(IndexSet(arrayLiteral: indexPath.section), with: .fade)
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        if let senderIndex = indexPath, currenciesWithNotifications.count > 0{
+            
+            let lastRow = (currenciesWithNotifications[senderIndex.section].notifications.count - 1)
+            // if sender row is higher than data count, then that cell has been deleted
+            // need to apply rounded corners to last cell
+            if senderIndex.row > lastRow {
+                let lastCellIndex = IndexPath(row: lastRow, section: senderIndex.section)
+                tableView.reloadRows(at: [lastCellIndex], with: .none)
             }
         }
     }
