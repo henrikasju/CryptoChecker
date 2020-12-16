@@ -286,7 +286,7 @@ extension CryptocurrencyDetailViewController: UICollectionViewDelegate, UICollec
             if self.representDataToFiat {
                 let preferenceManager = PreferencesManager()
                 let fiatSymbol = preferenceManager.getFiatSymbol();
-                let valueOfFiat = preferenceManager.getFiatValueString(value: valueDetail.fiatValue)
+                let valueOfFiat = preferenceManager.getValueAsSelectedFiatString(value: valueDetail.fiatValue)
                 
                 cell.updateFieldWithData(title: valueDetail.detailTitle, detail: valueOfFiat+fiatSymbol, atributedDetail: nil)
             }else{

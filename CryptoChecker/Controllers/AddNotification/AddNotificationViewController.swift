@@ -58,37 +58,13 @@ class AddNotificationViewController: UIViewController {
         return bar
     }()
     
-    let fiatButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.heightAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionHeight).isActive = true
-        button.widthAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionWidth).isActive = true
-        button.setTitle("USD", for: .normal)
-        button.titleLabel?.font = Constants.CryptoCurrenciesController.Fonts.currencySelection
+    let currencyDisplaySelectionView: CurrencyDisplaySelectionView = {
+        let view = CurrencyDisplaySelectionView(buttonsHeight: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionHeight,
+                                                buttonsWidth: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionWidth,
+                                                spacing: 16.0)
+        view.translatesAutoresizingMaskIntoConstraints = false
         
-        button.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-        button.setTitleColor(Constants.AppColors.Text.selectedOption, for: .selected)
-        button.setTitleColor(Constants.AppColors.Text.notSelectedOption, for: .normal)
-        button.isSelected = true
-        button.layer.cornerRadius = Constants.CryptoCurrenciesController.ViewSizes.currencySelectionRoundness
-
-        return button
-    }()
-    
-    let bitcoinButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.heightAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionHeight).isActive = true
-        button.widthAnchor.constraint(equalToConstant: Constants.CryptoCurrenciesController.ViewSizes.currencySelectionWidth).isActive = true
-        button.setTitle("BTC", for: .normal)
-        button.titleLabel?.font = Constants.CryptoCurrenciesController.Fonts.currencySelection
-        
-        button.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-        button.setTitleColor(Constants.AppColors.Text.selectedOption, for: .selected)
-        button.setTitleColor(Constants.AppColors.Text.notSelectedOption, for: .normal)
-        button.layer.cornerRadius = Constants.CryptoCurrenciesController.ViewSizes.currencySelectionRoundness
-        
-        return button
+        return view
     }()
     
     let notificationCreationView: UIView = {
@@ -159,7 +135,7 @@ class AddNotificationViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        
+        currencyDisplaySelectionView.fiatButton.setTitle(UserDefaultsManager.getFiatCurrency(), for: .normal)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -196,8 +172,11 @@ class AddNotificationViewController: UIViewController {
     }
     
     private func updateViewData(viewData: Cryptocurrency){
-        let currentPrice = (representDataToFiat ? viewData.getFiatValueAsString() : viewData.getBitcoinValueAsString())
-        let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
+//        let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
+        let preferencesManager = PreferencesManager()
+        // TODO: Remove crypto hard code
+        let currentCurrencySymbol = representDataToFiat ? " " + preferencesManager.getFiatSymbol() : " ₿"
+        let currentPrice: String = representDataToFiat ? preferencesManager.getValueAsSelectedFiatString(value: viewData.valueFiat ) : preferencesManager.getValueAsSelectedFiatString(value: viewData.value)
         
         let currentPriceSecondaryText: NSAttributedString = {
             let textAtributes = [NSAttributedString.Key.foregroundColor: Constants.NotificationController.Cell.Color.secondaryCurrentPrice]
@@ -219,7 +198,10 @@ class AddNotificationViewController: UIViewController {
     }
     
     private func updateNotificationExplanationLabel(currentValue: String, symbolName: String){
-        let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
+//        let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
+        let preferencesManager = PreferencesManager()
+        // TODO: Remove crypto hard code
+        let currentCurrencySymbol = representDataToFiat ? " " + preferencesManager.getFiatSymbol() : " ₿"
         let text = "Add notification when\n" + symbolName + " price is " + currentValue + currentCurrencySymbol
         creatingNotificationExplanationLabel.text = text
         
@@ -235,14 +217,11 @@ class AddNotificationViewController: UIViewController {
         navigationBar.topItem?.titleView = titleHStackView
         
         view.addSubview(navigationBar)
-        view.addSubview(fiatButton)
-        view.addSubview(bitcoinButton)
+        view.addSubview(currencyDisplaySelectionView)
         view.addSubview(notificationCreationView)
         view.addSubview(addNotificationButton)
         
-        fiatButton.addTarget(self, action: #selector(currencyConversionButtonPressed(sender:)), for: .touchUpInside)
-        bitcoinButton.addTarget(self, action: #selector(currencyConversionButtonPressed(sender:)), for: .touchUpInside)
-        
+        currencyDisplaySelectionView.setTargetToButtons(target: self, action: #selector(currencyConversionButtonPressed(sender:)), event: .touchUpInside)
         
         NSLayoutConstraint.activate([
             
@@ -251,14 +230,11 @@ class AddNotificationViewController: UIViewController {
             navigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             navigationBar.heightAnchor.constraint(equalToConstant: 44),
             
-            fiatButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            fiatButton.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
-            
-            bitcoinButton.leadingAnchor.constraint(equalTo: fiatButton.trailingAnchor, constant: 16),
-            bitcoinButton.topAnchor.constraint(equalTo: fiatButton.topAnchor, constant: 0),
-            
-            notificationCreationView.topAnchor.constraint(equalTo: fiatButton.bottomAnchor, constant: 16),
-            notificationCreationView.leadingAnchor.constraint(equalTo: fiatButton.leadingAnchor, constant: 0),
+            currencyDisplaySelectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            currencyDisplaySelectionView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
+                        
+            notificationCreationView.topAnchor.constraint(equalTo: currencyDisplaySelectionView.bottomAnchor, constant: 16),
+            notificationCreationView.leadingAnchor.constraint(equalTo: currencyDisplaySelectionView.leadingAnchor, constant: 0),
             notificationCreationView.trailingAnchor.constraint(equalTo: addNotificationButton.trailingAnchor, constant: 0),
             notificationCreationView.bottomAnchor.constraint(equalTo: addNotificationButton.topAnchor, constant: -16),
             
@@ -305,15 +281,15 @@ class AddNotificationViewController: UIViewController {
     @objc func cancelButtonPressed(sender: UIButton){
 
         if let transitioningDelegate = self.transitioningDelegate as? NotificationTransitioningDelegate{
-//            self.view.endEditing(true)
             transitioningDelegate.transitionDirection = .toBottom
             dismiss(animated: true, completion: nil)
         }
     }
     
     @objc func addNotificationButtonPressed(sender: UIButton){
-                
-        let notificationCurrencyType = (representDataToFiat ? "USD" : "BTC")
+        
+        let preferenceManager = PreferencesManager()
+        let notificationCurrencyType = (representDataToFiat ? preferenceManager.getFiatName() : "BTC")
         let selectedCurrentPrice = (representDataToFiat ? data?.valueFiat : data?.value)
 
         if let notificationSetValueText = selectedPriceTextField.text, let currentPrice = selectedCurrentPrice {
@@ -343,9 +319,7 @@ class AddNotificationViewController: UIViewController {
                         
                     }
                 }else{
-//                    else if (selectedPriceTextField.text?.count ?? 0) <= 0 {
                     selectedPriceHelperLabel.textColor = .red
-//                    }
                 }
             }else if (selectedPriceTextField.text?.count ?? 0) <= 0 {
                 selectedPriceHelperLabel.textColor = .red
@@ -353,50 +327,26 @@ class AddNotificationViewController: UIViewController {
         }
     }
     
-    @objc private func currencyConversionButtonPressed(sender: UIButton){
-        if sender == fiatButton {
-            print("Fiat Button pressed!")
+    @objc func currencyConversionButtonPressed(sender: UIButton){
+        
+        if sender == currencyDisplaySelectionView.fiatButton {
+            representDataToFiat = true
+            currencyDisplaySelectionView.fiatButton.isSelected = true
+            currencyDisplaySelectionView.fiatButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
             
-            if fiatButton.isSelected {
-                fiatButton.isSelected = false
-                fiatButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-                
-                bitcoinButton.isSelected = true
-                bitcoinButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-                
-                representDataToFiat = false
-            }else{
-                fiatButton.isSelected = true
-                fiatButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-                
-                bitcoinButton.isSelected = false
-                bitcoinButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-                
-                representDataToFiat = true
-            }
-        }else if( sender == bitcoinButton){
-            print("BTC Button pressed!")
+            currencyDisplaySelectionView.cryptoButton.isSelected = false
+            currencyDisplaySelectionView.cryptoButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
+
+        }else if sender == currencyDisplaySelectionView.cryptoButton {
+            representDataToFiat = false
+            currencyDisplaySelectionView.fiatButton.isSelected = false
+            currencyDisplaySelectionView.fiatButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
             
-            if bitcoinButton.isSelected {
-                bitcoinButton.isSelected = false
-                bitcoinButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-                
-                fiatButton.isSelected = true
-                fiatButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-                
-                representDataToFiat = true
-            }else{
-                bitcoinButton.isSelected = true
-                bitcoinButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
-                
-                fiatButton.isSelected = false
-                fiatButton.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
-                
-                representDataToFiat = false
-            }
+            currencyDisplaySelectionView.cryptoButton.isSelected = true
+            currencyDisplaySelectionView.cryptoButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
         }
         
-        if(sender == fiatButton || sender == bitcoinButton){
+        if(sender == currencyDisplaySelectionView.fiatButton || sender == currencyDisplaySelectionView.cryptoButton) {
             guard let availableData = data else {
                 fatalError("Error: Accesing currency data in AddNotificationViewController")
             }

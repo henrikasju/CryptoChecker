@@ -45,19 +45,24 @@ final class PreferencesManager{
     }
     
     // returning cryptocurrency value as selected fiat value
-    public func getFiatValue(value: Double) -> Double {
+    public func getValueAsSelectedFiat(value: Double) -> Double {
         let selectedCurrencySymbol: String = getFiatName()
         
         return cryptocurrencyManager.getValueAsFiatDouble(value: value, fiatName: selectedCurrencySymbol)
     }
     
-    // returning fiat value as string
-    public func getFiatValueString(value: Double) -> String {
-        return String(format: valueFloatingPointFiat, getFiatValue(value: value))
+    // returning selected fiat value as string
+    public func getValueAsSelectedFiatString(value: Double) -> String {
+        return String(format: valueFloatingPointFiat, getValueAsSelectedFiat(value: value))
     }
     
     // returning cryptocurrency value as String
-    public func getValueAsCryptoString(value: Double) -> String {
+    public func getFormatedSetCryptoValueString(value: Double) -> String {
         return String(format: valueFloatingPointBitcoin, value)
+    }
+    
+    // returning formated fiat value
+    public func getFormatedFiatValue(value: Double) -> String {
+        return String(format: valueFloatingPointFiat, value)
     }
 }
