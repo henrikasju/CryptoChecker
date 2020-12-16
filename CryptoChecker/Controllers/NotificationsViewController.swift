@@ -45,10 +45,6 @@ class NotificationsViewController: UIViewController {
             navigationController?.isNavigationBarHidden = true
             
             currenciesWithNotifications = DataBaseManager.shareInstance.fetchCryptocurrenciesWithNotifications()
-            currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
-            currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
-            currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
-            currenciesWithNotifications.append(contentsOf: currenciesWithNotifications)
         }else{
             navigationController?.isNavigationBarHidden = false
         }
@@ -185,6 +181,22 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         }
         
         return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let selectedData = currenciesWithNotifications[indexPath.section]
+            // Checking if deleting cell is last in section
+            if selectedData.notifications.count > 1 {
+                selectedData.notifications.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            // If selected cell is last in section - deleting section
+            }else if selectedData.notifications.count > 0{
+                currenciesWithNotifications.remove(at: indexPath.section)
+                selectedData.notifications.remove(at: indexPath.row)
+                tableView.deleteSections(IndexSet(arrayLiteral: indexPath.section), with: .fade)
+            }
+        }
     }
     
 }
