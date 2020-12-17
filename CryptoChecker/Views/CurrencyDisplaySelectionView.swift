@@ -19,6 +19,7 @@ class CurrencyDisplaySelectionView: UIView {
         button.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
         button.setTitleColor(Constants.AppColors.Text.selectedOption, for: .selected)
         button.setTitleColor(Constants.AppColors.Text.notSelectedOption, for: .normal)
+        button.setTitleColor(.white, for: .disabled)
         button.isSelected = true
         button.layer.cornerRadius = Constants.CryptoCurrenciesController.ViewSizes.currencySelectionRoundness
 
@@ -33,6 +34,7 @@ class CurrencyDisplaySelectionView: UIView {
         button.backgroundColor = Constants.AppColors.ViewBackground.notSelectedOption
         button.setTitleColor(Constants.AppColors.Text.selectedOption, for: .selected)
         button.setTitleColor(Constants.AppColors.Text.notSelectedOption, for: .normal)
+        button.setTitleColor(.white, for: .disabled)
         button.isSelected = false
         button.layer.cornerRadius = Constants.CryptoCurrenciesController.ViewSizes.currencySelectionRoundness
         

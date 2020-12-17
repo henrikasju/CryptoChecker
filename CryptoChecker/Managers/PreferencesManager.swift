@@ -33,11 +33,17 @@ final class PreferencesManager{
     }
     
     // Getting fiat symbol from fiat name
-    public func getFiatSymbol() -> String {
-        let fiatName = self.getFiatName()
+    public func getFiatSymbol(fiatName: String? = nil) -> String {
+        var setfiatName: String = ""
+        if fiatName == nil {
+            setfiatName = self.getFiatName()
+        }else{
+            setfiatName = fiatName!
+        }
+        
         // Checking if requested fiat symbol exist
-        if fiatSymbols.keys.contains(fiatName) {
-            return fiatSymbols[fiatName]!
+        if fiatSymbols.keys.contains(setfiatName) {
+            return fiatSymbols[setfiatName]!
         // If symbols does not exist, returning USD symbol
         }else{
             return fiatSymbols["USD"] ?? "$"
@@ -65,4 +71,5 @@ final class PreferencesManager{
     public func getFormatedFiatValue(value: Double) -> String {
         return String(format: valueFloatingPointFiat, value)
     }
+    
 }

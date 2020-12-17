@@ -212,6 +212,22 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedData = currenciesWithNotifications[indexPath.section]
+        let selectedNotification = selectedData.notifications[indexPath.row]
+        
+        let vc = AddNotificationViewController()
+        addNotificationTransitioningDelegate.transitionDirection = .fromBottom
+        vc.transitioningDelegate = addNotificationTransitioningDelegate
+        vc.modalPresentationStyle = .custom
+        
+        vc.delegate = self
+        vc.data = selectedData
+        vc.editMode = true
+        vc.editData = selectedNotification
+        
+        navigationController?.present(vc, animated: true, completion: nil)
+    }
     
 }
 

@@ -11,6 +11,8 @@ protocol AddNotificationViewControllerDelegate {
     func AddNotificationPopUpViewWillDisapear(_ viewController: AddNotificationViewController, animated: Bool)
 }
 
+// TODO: Clean up editing mode!
+
 class AddNotificationViewController: UIViewController {
         
     // TODO: Should be views should be seperated into seperate view files!
@@ -134,8 +136,6 @@ class AddNotificationViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        currencyDisplaySelectionView.fiatButton.setTitle(UserDefaultsManager.getFiatCurrency(), for: .normal)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -145,6 +145,8 @@ class AddNotificationViewController: UIViewController {
     }
     
     public var data: Cryptocurrency?
+    public var editMode: Bool = false
+    public var editData: Cryptocurrency.CurrencyNotification?
     private var representDataToFiat: Bool = true
     public var delegate: AddNotificationViewControllerDelegate?
 
@@ -168,15 +170,52 @@ class AddNotificationViewController: UIViewController {
         navigationBarTitleLabel.text = viewData.name
         navigationBarTitleImage.image = viewData.image
         
+        if let editInfo = self.editData, editMode {
+            representDataToFiat = (editInfo.currencyType != "BTC" ? true : false)
+            if representDataToFiat {
+                currencyDisplaySelectionView.cryptoButton.isEnabled = false
+                currencyDisplaySelectionView.cryptoButton.backgroundColor = .gray
+                
+                currencyDisplaySelectionView.fiatButton.isUserInteractionEnabled = false
+                currencyDisplaySelectionView.fiatButton.setTitle(editInfo.currencyType, for: .normal)
+            }else{
+                currencyDisplaySelectionView.fiatButton.isEnabled = false
+                currencyDisplaySelectionView.fiatButton.backgroundColor = .gray
+                currencyDisplaySelectionView.fiatButton.isSelected = false
+                
+                currencyDisplaySelectionView.cryptoButton.backgroundColor = Constants.AppColors.ViewBackground.selectedOption
+                currencyDisplaySelectionView.cryptoButton.isSelected = true
+                currencyDisplaySelectionView.cryptoButton.isUserInteractionEnabled = false
+            }
+            
+            selectedPriceTextField.text = String(editInfo.setValue)
+            addNotificationButton.setTitle("Update Notification", for: .normal)
+        }else{
+
+            currencyDisplaySelectionView.fiatButton.setTitle(UserDefaultsManager.getFiatCurrency(), for: .normal)
+
+        }
+        
         updateViewData(viewData: viewData)
     }
     
     private func updateViewData(viewData: Cryptocurrency){
 //        let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
         let preferencesManager = PreferencesManager()
+        let cryptoManager = CryptocurrencyManager()
         // TODO: Remove crypto hard code
-        let currentCurrencySymbol = representDataToFiat ? " " + preferencesManager.getFiatSymbol() : " ₿"
-        let currentPrice: String = representDataToFiat ? preferencesManager.getValueAsSelectedFiatString(value: viewData.valueFiat ) : preferencesManager.getValueAsSelectedFiatString(value: viewData.value)
+        var currentCurrencySymbol: String
+        var currentPrice: String
+        
+        if editMode, let editInfo = editData {
+            currentCurrencySymbol = ( representDataToFiat ? editInfo.currencyType : "₿" )
+            currentPrice = ( representDataToFiat ? preferencesManager.getFormatedFiatValue(value: cryptoManager.getValueAsFiatDouble(value: viewData.valueFiat, fiatName: editInfo.currencyType)) : preferencesManager.getFormatedSetCryptoValueString(value: viewData.value) )
+        }else{
+            currentCurrencySymbol = representDataToFiat ? preferencesManager.getFiatSymbol() : "₿"
+            currentPrice = representDataToFiat ? preferencesManager.getValueAsSelectedFiatString(value: viewData.valueFiat ) : preferencesManager.getFormatedSetCryptoValueString(value: viewData.value)
+        }
+        
+//        let currentPrice: String = representDataToFiat ? preferencesManager.getValueAsSelectedFiatString(value: viewData.valueFiat ) : preferencesManager.getValueAsSelectedFiatString(value: viewData.value)
         
         let currentPriceSecondaryText: NSAttributedString = {
             let textAtributes = [NSAttributedString.Key.foregroundColor: Constants.NotificationController.Cell.Color.secondaryCurrentPrice]
@@ -201,7 +240,13 @@ class AddNotificationViewController: UIViewController {
 //        let currentCurrencySymbol = String((representDataToFiat ? " $" : " ₿"))
         let preferencesManager = PreferencesManager()
         // TODO: Remove crypto hard code
-        let currentCurrencySymbol = representDataToFiat ? " " + preferencesManager.getFiatSymbol() : " ₿"
+        var currentCurrencySymbol: String
+        if editMode, let editInfo = editData {
+            currentCurrencySymbol = representDataToFiat ? " " + preferencesManager.getFiatSymbol( fiatName: editInfo.currencyType ) : " ₿"
+        }else{
+            currentCurrencySymbol = representDataToFiat ? " " + preferencesManager.getFiatSymbol() : " ₿"
+        }
+        
         let text = "Add notification when\n" + symbolName + " price is " + currentValue + currentCurrencySymbol
         creatingNotificationExplanationLabel.text = text
         
@@ -289,16 +334,22 @@ class AddNotificationViewController: UIViewController {
     @objc func addNotificationButtonPressed(sender: UIButton){
         
         let preferenceManager = PreferencesManager()
+        let cryptoManager = CryptocurrencyManager()
         let notificationCurrencyType = (representDataToFiat ? preferenceManager.getFiatName() : "BTC")
-        let selectedCurrentPrice = (representDataToFiat ? data?.valueFiat : data?.value)
-
+        var selectedCurrentPrice: Double?
+        if editMode, let viewData = data, let editInfo = editData {
+            selectedCurrentPrice = (representDataToFiat ? cryptoManager.getValueAsFiatDouble(value: viewData.valueFiat, fiatName: editInfo.currencyType) : viewData.value)
+        }else if let viewData = data {
+            selectedCurrentPrice = (representDataToFiat ? preferenceManager.getValueAsSelectedFiat(value: viewData.valueFiat ) : data?.value)
+        }
+        
         if let notificationSetValueText = selectedPriceTextField.text, let currentPrice = selectedCurrentPrice {
             // Modify textfield String Text
             
             if let setValue = getDoubleFromStringWithLocale(valueText: notificationSetValueText) {
                 
                 if setValue > 0 {
-                    let isAboveCurrent = setValue > currentPrice
+                    var isAboveCurrent = setValue > currentPrice
                     
                     let date = Date()
                     let dateFormat = DateFormatter()
@@ -306,9 +357,16 @@ class AddNotificationViewController: UIViewController {
                     
                     let creationDate = dateFormat.string(from: date)
                     
-                    let notification = Cryptocurrency.CurrencyNotification(setValue: setValue, aboveValue: isAboveCurrent, creationDate: creationDate, currencyType: notificationCurrencyType, isOn: true)
-                    
-                    data?.notifications.append(notification)
+                    if editMode && editData != nil, let fiatValue = data?.valueFiat {
+                        editData!.date = creationDate
+                        editData!.setValue = setValue
+                        editData!.aboveValue = isAboveCurrent
+                        editData!.isOn = true
+                    }else{
+                        let notification = Cryptocurrency.CurrencyNotification(setValue: setValue, aboveValue: isAboveCurrent, creationDate: creationDate, currencyType: notificationCurrencyType, isOn: true)
+                        
+                        data?.notifications.append(notification)
+                    }
                     
                     if let transitioningDelegate = self.transitioningDelegate as? NotificationTransitioningDelegate{
                         
