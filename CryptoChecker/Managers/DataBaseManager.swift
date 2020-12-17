@@ -51,7 +51,7 @@ final class DataBaseManager{
         data[1].notifications = [
             Cryptocurrency.CurrencyNotification(setValue: 304.99, aboveValue: false, creationDate: "2020-09-12", currencyType: "USD", isOn: true),
             Cryptocurrency.CurrencyNotification(setValue: 320.00, aboveValue: true, creationDate: "2020-05-27", currencyType: "USD", isOn: true),
-            Cryptocurrency.CurrencyNotification(setValue: 307.11, aboveValue: true, creationDate: "2020-02-12", currencyType: "USD", isOn: false),
+            Cryptocurrency.CurrencyNotification(setValue: 307.11, aboveValue: false, creationDate: "2020-02-12", currencyType: "USD", isOn: false),
             Cryptocurrency.CurrencyNotification(setValue: 299.50, aboveValue: false, creationDate: "2020-01-22", currencyType: "USD", isOn: false),
         ]
         
