@@ -205,7 +205,7 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
             if lastRow >= 0 && senderIndex.row > lastRow {
                 let lastCellIndex = IndexPath(row: lastRow, section: senderIndex.section)
                 tableView.reloadRows(at: [lastCellIndex], with: .none)
-            }else if lastRow < 0{
+            }else if lastRow < 0 && showAllCurrencies {
                 currenciesWithNotifications.remove(at: senderIndex.section)
                 tableView.deleteSections(IndexSet(arrayLiteral: senderIndex.section), with: .fade)
             }
