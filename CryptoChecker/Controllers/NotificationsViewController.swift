@@ -34,6 +34,15 @@ class NotificationsViewController: UIViewController {
         return tableView
     }()
     
+    let helperLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Currently, there are no notifications set!"
+        label.textColor = .darkGray
+        
+        return label
+    }()
+    
     var addNotificationTransitioningDelegate = NotificationTransitioningDelegate()
     var showAllCurrencies: Bool = true
     var currenciesWithNotifications: [Cryptocurrency] = []
@@ -47,6 +56,12 @@ class NotificationsViewController: UIViewController {
             currenciesWithNotifications = DataBaseManager.shareInstance.fetchCryptocurrenciesWithNotifications()
         }else{
             navigationController?.isNavigationBarHidden = false
+        }
+        
+        if showAllCurrencies && currenciesWithNotifications.count <= 0 {
+            setupHelperLabelView()
+        }else if showAllCurrencies && currenciesWithNotifications.count > 0 && view.subviews.contains(helperLabel) {
+            helperLabel.removeFromSuperview()
         }
         
         // TODO: Optimize!
@@ -68,6 +83,16 @@ class NotificationsViewController: UIViewController {
         
         setupTitleLabel()
         setupTableView()
+        
+    }
+    
+    private func setupHelperLabelView() {
+        view.addSubview(helperLabel)
+        
+        NSLayoutConstraint.activate([
+            helperLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: 0),
+            helperLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 0)
+        ])
     }
     
     private func setupTitleLabel(){
@@ -208,6 +233,10 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
             }else if lastRow < 0 && showAllCurrencies {
                 currenciesWithNotifications.remove(at: senderIndex.section)
                 tableView.deleteSections(IndexSet(arrayLiteral: senderIndex.section), with: .fade)
+                
+                if currenciesWithNotifications.count <= 0 && !view.subviews.contains(helperLabel){
+                    setupHelperLabelView()
+                }
             }
         }
     }
