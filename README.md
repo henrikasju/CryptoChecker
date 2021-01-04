@@ -14,7 +14,7 @@ iOS App for checking cryptocurrencies
 - [ ] See cryptocurrency information in real time
 - [ ] Get notified by created notifications
 - [ ] Working graph representation of historical cryptocurrency data
-- [ ] Real time and accurate cryptocurrency value convertion to Fiat value
+- [ ] Real time and accurate cryptocurrency value conversion to Fiat value
 - [ ] Cryptocurrency data fetching from API
 
 ## Initial design ideas
@@ -30,4 +30,4 @@ Created with Adobe XD
 ## TODO List
 - [ ] Add Core Data local database
 - [ ] Fetch cryptocurrency data with API
-- [ ] Implement notificaitons
+- [ ] Implement notifications
